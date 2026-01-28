@@ -5,7 +5,7 @@ sap.ui.define([
 	"use strict";
 
 	return {
-		date(sDate) {
+		rormatDate(sDate) {
 			const oDateFormat = DateFormat.getInstance({
 				relative: true
 			});
