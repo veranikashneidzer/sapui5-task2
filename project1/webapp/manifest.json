@@ -33,7 +33,6 @@
     }
   },
   "sap.ui5": {
-    "flexEnabled": true,
     "dependencies": {
       "minUI5Version": "1.144.0",
       "libs": {
@@ -49,8 +48,16 @@
       "i18n": {
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
-          "bundleName": "project1.i18n.i18n"
+          "bundleName": "project1.i18n.i18n",
+          "supportedLocales": [
+            ""
+          ],
+          "fallbackLocale": ""
         }
+      },
+      "books": {
+        "type": "sap.ui.model.json.JSONModel",
+        "uri": "books.json"
       }
     },
     "resources": {

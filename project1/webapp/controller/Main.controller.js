@@ -1,10 +1,19 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller"
+  "sap/ui/core/mvc/Controller",
 ], (Controller) => {
-    "use strict";
+  "use strict";
 
-    return Controller.extend("project1.controller.Main", {
-        onInit() {
-        }
-    });
+  return Controller.extend("project1.controller.Main", {
+    onInit() {
+    },
+
+    onBeforeRendering: function () {
+    },
+
+    onAfterRendering: function () {
+    },
+
+    onExit: function () {
+    },
+  });
 });

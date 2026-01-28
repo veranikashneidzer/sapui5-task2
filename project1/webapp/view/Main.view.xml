@@ -1,6 +1,67 @@
 <mvc:View controllerName="project1.controller.Main"
     xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
     xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
+    <Page id="page">
+        <Table
+            id="booksList"
+            width="auto"
+            items="{
+                    path : 'books>/Books'
+                }">
+            <headerToolbar>
+                <Toolbar>
+                    <Title text="{i18n>booksListTitle}" />
+                </Toolbar>
+            </headerToolbar>
+            <columns>
+                <Column>
+                    <Text text="{i18n>columnName}" />
+                </Column>
+                <Column
+                    minScreenWidth="Small"
+                    demandPopin="true">
+                    <Text text="{i18n>columnAuthor}" />
+                </Column>
+                <Column
+                    minScreenWidth="Small"
+                    demandPopin="true">
+                    <Text text="{i18n>columnGenre}" />
+                </Column>
+                <Column
+                    minScreenWidth="Small"
+                    demandPopin="true">
+                    <Text text="{i18n>columnReleaseDate}" />
+                </Column>
+                <Column
+                    hAlign="End"
+                    minScreenWidth="Small"
+                    demandPopin="true">
+                    <Text text="{i18n>columnAvailableQuantity}" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem>
+                    <cells>
+                        <ObjectIdentifier title="{books>Name}" />
+                        <Text text="{books>Author}" />
+                        <Text text="{books>Genre}" />
+                        <Text
+                            core:require="{
+                                Formatter: 'project1/model/formatter'
+                            }"
+                            text="{
+                                    parts: [
+                                        'books>ReleaseDate'
+                                    ],
+                                    formatter: 'Formatter.date.bind($controller)'
+                            }"/>
+                        <ObjectNumber
+                            number="{books>AvailableQuantity}"
+                            emphasized="false"/>
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
     </Page>
 </mvc:View>
