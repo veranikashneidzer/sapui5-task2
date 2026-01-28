@@ -7,8 +7,11 @@
             id="booksList"
             width="auto"
             items="{
-                    path : 'books>/Books'
-                }">
+                path: 'books>/books',
+                sorter: {
+                    path: 'Name'
+                }
+            }">
             <headerToolbar>
                 <Toolbar>
                     <Title text="{i18n>booksListTitle}" />

@@ -54,10 +54,6 @@
           ],
           "fallbackLocale": ""
         }
-      },
-      "books": {
-        "type": "sap.ui.model.json.JSONModel",
-        "uri": "books.json"
       }
     },
     "resources": {
