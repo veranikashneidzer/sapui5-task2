@@ -2,19 +2,46 @@
     xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core"
     xmlns="sap.m">
-    <Page id="page">
+    <Page id="page" title="{i18n>booksListTitle}">
         <Table
             id="booksList"
             width="auto"
+            mode="MultiSelect"
             items="{
-                path: 'books>/books',
-                sorter: {
-                    path: 'Name'
-                }
+                path: 'books>/books'
             }">
             <headerToolbar>
                 <Toolbar>
-                    <Title text="{i18n>booksListTitle}" />
+                    <Button 
+                        text="{i18n>buttonAddRecord}"
+						press="onAddRecord">
+                        <layoutData>
+                            <FlexItemData growFactor="1" />
+                        </layoutData>
+                    </Button>
+                    <ToolbarSpacer/>
+                    <Button
+                        text="{i18n>buttonDeleteRecord}"
+                        press="onDeleteRecord">
+                        <layoutData>
+                            <FlexItemData growFactor="1" />
+                        </layoutData>
+                    </Button>
+                    <Input
+                        width="50%"
+                        valueLiveUpdate="true"
+                        liveChange=".onSetSearchedName"/>
+                    <ToolbarSpacer/>
+                    <ComboBox
+                        selectedKey="0"
+                        selectionChange=".onSetSelectedGenre"
+                        items="{
+                            path: 'books>/genres'
+                        }">
+                        <core:Item key="{books>key}" text="{books>title}" />
+                    </ComboBox>
+                    <ToolbarSpacer/>
+                    <Button text="{i18n>buttonFilter}" press="onFilterTable" />
                 </Toolbar>
             </headerToolbar>
             <columns>
@@ -48,7 +75,7 @@
                     <cells>
                         <ObjectIdentifier title="{books>Name}" />
                         <Text text="{books>Author}" />
-                        <Text text="{books>Genre}" />
+                        <Text text="{books>Genre/title}" />
                         <Text
                             core:require="{
                                 Formatter: 'project1/model/formatter'
