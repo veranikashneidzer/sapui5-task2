@@ -64,16 +64,32 @@
                     <Text text="{i18n>columnReleaseDate}" />
                 </Column>
                 <Column
-                    hAlign="End"
                     minScreenWidth="Small"
                     demandPopin="true">
                     <Text text="{i18n>columnAvailableQuantity}" />
+                </Column>
+                <Column
+                    hAlign="End"
+                    width="5em"
+                    minScreenWidth="Small"
+                    demandPopin="true">
+                    <Text text="{i18n>columnActions}" />
                 </Column>
             </columns>
             <items>
                 <ColumnListItem>
                     <cells>
-                        <ObjectIdentifier title="{books>Name}" />
+                        <FlexBox>
+                            <ObjectIdentifier 
+                                visible="{= !${books>/isTableInEditMode}}" 
+                                title="{books>Name}"
+                                />
+                            <Input
+                                visible="{books>/isTableInEditMode}"
+                                value="{books>Name}"
+                                liveChange=".onChangeBookName"
+                                />
+                        </FlexBox>
                         <Text text="{books>Author}" />
                         <Text text="{books>Genre/title}" />
                         <Text
@@ -89,6 +105,16 @@
                         <ObjectNumber
                             number="{books>AvailableQuantity}"
                             emphasized="false"/>
+                        <FlexBox>
+                            <Button 
+                                text="{i18n>buttonEdit}"
+                                visible="{= !${books>/isTableInEditMode}}"
+                                press="onEditTitle"/>
+                            <Button 
+                                text="{i18n>buttonSave}"
+                                visible="{books>/isTableInEditMode}"
+                                press="onSaveTitle"/>
+                        </FlexBox>
                     </cells>
                 </ColumnListItem>
             </items>

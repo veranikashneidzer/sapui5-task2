@@ -68,7 +68,7 @@ sap.ui.define([
       const oList = this.byId("booksList");
       const oBinding = oList.getBinding("items");
       const oModel = this.getBooksModel();
-      
+
       oModel.setProperty("/books", [...oBinding.getContexts().map(el => el.getObject()), {
         ID: `${Math.floor(Math.random() * 10000)}`,
         Name: "",
@@ -136,12 +136,34 @@ sap.ui.define([
 
     onEditTitle() {
       const oModel = this.getBooksModel();
-            oModel.setProperty("/isTableInEditMode", true);
+      oModel.setProperty("/isTableInEditMode", true);
     },
 
-    onSaveTitle() {
+    onChangeBookName(oEvent) {
+      const sValue = oEvent.getSource().getValue();
+      const sBookRowId = oEvent.getParameters()?.["id"]?.slice(-1);
+
+      const oList = this.byId("booksList");
+      const oBinding = oList.getBinding("items");
+      const oBookData = oBinding.getContexts()?.[sBookRowId]?.getObject();
+
       const oModel = this.getBooksModel();
-            oModel.setProperty("/isTableInEditMode", false);
+      oModel.setProperty("/newBookData", {
+        ...oBookData,
+        Name: sValue
+      });
+    },
+
+    onSaveTitle(oEvent) {
+      const oModel = this.getBooksModel();
+      oModel.setProperty("/isTableInEditMode", false);
+      const oList = this.byId("booksList");
+      const oBinding = oList.getBinding("items");
+
+      const oNewBookData = oModel.getProperty("/newBookData");
+      const booksData = oModel.getProperty("/books");
+
+      oModel.setProperty("/books", booksData.map(bookData => (bookData.ID === oNewBookData.ID) ? oNewBookData : bookData));
     }
   });
 });
