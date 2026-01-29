@@ -81,14 +81,18 @@
                     <cells>
                         <FlexBox>
                             <ObjectIdentifier 
-                                visible="{= !${books>/isTableInEditMode}}" 
-                                title="{books>Name}"
+                                visible="{= !${books>isEditable}}" 
+                                title="{books>currentName}"
                                 />
                             <Input
-                                visible="{books>/isTableInEditMode}"
-                                value="{books>Name}"
+                                visible="{books>isEditable}"
+                                value="{books>currentName}"
                                 liveChange=".onChangeBookName"
                                 />
+                            <Button 
+                                text="{i18n>buttonCancel}"
+                                visible="{books>isEditable}"
+                                press="onCancelUpdateTitle"/>
                         </FlexBox>
                         <Text text="{books>Author}" />
                         <Text text="{books>Genre/title}" />
@@ -108,11 +112,11 @@
                         <FlexBox>
                             <Button 
                                 text="{i18n>buttonEdit}"
-                                visible="{= !${books>/isTableInEditMode}}"
+                                visible="{= !${books>isEditable}}"
                                 press="onEditTitle"/>
                             <Button 
                                 text="{i18n>buttonSave}"
-                                visible="{books>/isTableInEditMode}"
+                                visible="{books>isEditable}"
                                 press="onSaveTitle"/>
                         </FlexBox>
                     </cells>

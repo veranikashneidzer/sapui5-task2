@@ -15,7 +15,8 @@ sap.ui.define([
           Author: "Arthur Conan Doyle",
           Genre: "Detective fiction",
           ReleaseDate: 2590363440000,
-          AvailableQuantity: 1
+          AvailableQuantity: 1,
+          isEditable: false
         },
         {
           ID: "1",
@@ -23,7 +24,8 @@ sap.ui.define([
           Author: "Agatha Christie",
           Genre: "Detective fiction",
           ReleaseDate: 1554256800000,
-          AvailableQuantity: 5
+          AvailableQuantity: 5,
+          isEditable: false
         },
         {
           ID: "2",
@@ -31,7 +33,8 @@ sap.ui.define([
           Author: "Lewis Carroll",
           Genre: "Children's fiction",
           ReleaseDate: 510202800000,
-          AvailableQuantity: 10
+          AvailableQuantity: 10,
+          isEditable: false
         },
         {
           ID: "3",
@@ -39,7 +42,8 @@ sap.ui.define([
           Author: "Ray Bradbury",
           Genre: "Dystopian",
           ReleaseDate: 511326000000,
-          AvailableQuantity: 3
+          AvailableQuantity: 3,
+          isEditable: false
         },
         {
           ID: "4",
@@ -47,18 +51,18 @@ sap.ui.define([
           Author: "George Orwell",
           Genre: "Dystopian",
           ReleaseDate: 522817200000,
-          AvailableQuantity: 15
+          AvailableQuantity: 15,
+          isEditable: false
         }
       ];
 
       const aGenres = [{ key: 0, title: 'All' }, ...Array.from(new Set(aBooks.map(book => book.Genre))).map((genre, index) => ({ key: index + 1, title: genre }))];
 
       this.oBookModel = new JSONModel({
-        books: aBooks.map(book => ({ ...book, Genre: aGenres.find(genre => genre.title === book.Genre) })),
+        books: aBooks.map(book => ({ ...book, Genre: aGenres.find(genre => genre.title === book.Genre), currentName: book.Name })),
         genres: aGenres,
         searchedName: '',
         selectedGenre: '',
-        isTableInEditMode: false,
       });
 
       this.getView().setModel(this.oBookModel, "books");
@@ -134,36 +138,27 @@ sap.ui.define([
       oBinding.filter(aFilter);
     },
 
-    onEditTitle() {
+    onEditTitle(oEvent) {
       const oModel = this.getBooksModel();
-      oModel.setProperty("/isTableInEditMode", true);
-    },
-
-    onChangeBookName(oEvent) {
-      const sValue = oEvent.getSource().getValue();
-      const sBookRowId = oEvent.getParameters()?.["id"]?.slice(-1);
-
-      const oList = this.byId("booksList");
-      const oBinding = oList.getBinding("items");
-      const oBookData = oBinding.getContexts()?.[sBookRowId]?.getObject();
-
-      const oModel = this.getBooksModel();
-      oModel.setProperty("/newBookData", {
-        ...oBookData,
-        Name: sValue
-      });
+      const oBookData = oEvent.getSource().getBindingContext("books").getObject();
+      const oBooksData = oModel.getProperty("/books");
+      oModel.setProperty("/books", oBooksData.map(bookData => (bookData.ID === oBookData.ID) ? {...oBookData, isEditable: true } : bookData));
     },
 
     onSaveTitle(oEvent) {
       const oModel = this.getBooksModel();
-      oModel.setProperty("/isTableInEditMode", false);
-      const oList = this.byId("booksList");
-      const oBinding = oList.getBinding("items");
+      const oNewBookData = oEvent.getSource().getBindingContext("books").getObject();
+      const oBooksData = oModel.getProperty("/books");
 
-      const oNewBookData = oModel.getProperty("/newBookData");
-      const booksData = oModel.getProperty("/books");
+      oModel.setProperty("/books", oBooksData.map(bookData => (bookData.ID === oNewBookData.ID) ? { ...oNewBookData, isEditable: false, Name: oNewBookData.currentName } : bookData));
+    },
 
-      oModel.setProperty("/books", booksData.map(bookData => (bookData.ID === oNewBookData.ID) ? oNewBookData : bookData));
+    onCancelUpdateTitle(oEvent) {
+      const oModel = this.getBooksModel();
+      const oNewBookData = oEvent.getSource().getBindingContext("books").getObject();
+      const oBooksData = oModel.getProperty("/books");
+
+      oModel.setProperty("/books", oBooksData.map(bookData => (bookData.ID === oNewBookData.ID) ? { ...bookData, isEditable: false, currentName: oNewBookData.Name } : bookData));
     }
   });
 });
