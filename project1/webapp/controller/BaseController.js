@@ -7,10 +7,5 @@ sap.ui.define([
         getBooksModel() {
             return this.getView().getModel("books");
         },
-
-        setBooksModelProperty(propertyName = '/books', propertyValue) {
-            const oModel = this.getBooksModel();
-            oModel.setProperty(propertyName, propertyValue);
-        },
     });
 });

@@ -56,6 +56,9 @@ sap.ui.define([
       this.oBookModel = new JSONModel({
         books: aBooks.map(book => ({ ...book, Genre: aGenres.find(genre => genre.title === book.Genre) })),
         genres: aGenres,
+        searchedName: '',
+        selectedGenre: '',
+        isTableInEditMode: false,
       });
 
       this.getView().setModel(this.oBookModel, "books");
@@ -64,8 +67,9 @@ sap.ui.define([
     onAddRecord() {
       const oList = this.byId("booksList");
       const oBinding = oList.getBinding("items");
-
-      this.setBooksModelProperty("/books", [...oBinding.getContexts().map(el => el.getObject()), {
+      const oModel = this.getBooksModel();
+      
+      oModel.setProperty("/books", [...oBinding.getContexts().map(el => el.getObject()), {
         ID: `${Math.floor(Math.random() * 10000)}`,
         Name: "",
         Author: "",
@@ -90,42 +94,54 @@ sap.ui.define([
         }
       });
 
-      this.setBooksModelProperty("/books", aUpdatedBooksList);
+      const oModel = this.getBooksModel();
+      oModel.setProperty("/books", aUpdatedBooksList);
       oList.removeSelections();
     },
 
     onSetSearchedName(oEvent) {
       const sValue = oEvent.getSource().getValue();
-      this.setBooksModelProperty("/searchedName", sValue);
+      const oModel = this.getBooksModel();
+      oModel.setProperty("/searchedName", sValue);
     },
 
     onSetSelectedGenre(oEvent) {
       const selectedKey = oEvent.getSource()?.getSelectedKey();
-      this.setBooksModelProperty("/selectedGenre", selectedKey);
+      const oModel = this.getBooksModel();
+      oModel.setProperty("/selectedGenre", selectedKey);
     },
 
     onFilterTable() {
       const oModel = this.getBooksModel();
-      const selectedGenre = oModel.getData().selectedGenre;
-      const searchedName = oModel.getData().searchedName;
+      const sSelectedGenre = oModel.getData().selectedGenre;
+      const sSearchedName = oModel.getData().searchedName;
 
       const oList = this.byId("booksList");
       const oBinding = oList.getBinding("items");
 
-      let aFilterForGenre = [];
-      if (selectedGenre) {
-        if (selectedGenre === '0') {
-          aFilterForGenre = [];
+      const aFilter = [];
+      if (sSelectedGenre) {
+        if (sSelectedGenre === '0') {
+          aFilter = [];
         } else {
-          aFilterForGenre.push(new Filter("Genre/key", FilterOperator.EQ, selectedGenre));
+          aFilter.push(new Filter("Genre/key", FilterOperator.EQ, sSelectedGenre));
         }
       }
 
-      const aFilter = [];
-      if (searchedName) {
-        aFilter.push(new Filter("Name", FilterOperator.Contains, searchedName));
+      if (sSearchedName) {
+        aFilter.push(new Filter("Name", FilterOperator.Contains, sSearchedName));
       }
-      oBinding.filter([...aFilterForGenre, ...aFilter]);
+      oBinding.filter(aFilter);
+    },
+
+    onEditTitle() {
+      const oModel = this.getBooksModel();
+            oModel.setProperty("/isTableInEditMode", true);
+    },
+
+    onSaveTitle() {
+      const oModel = this.getBooksModel();
+            oModel.setProperty("/isTableInEditMode", false);
     }
   });
 });
