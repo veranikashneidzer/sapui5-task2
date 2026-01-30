@@ -8,7 +8,7 @@
             width="auto"
             mode="MultiSelect"
             items="{
-                path: 'books>/books'
+                path: 'booksModel>/currentBooks'
             }">
             <headerToolbar>
                 <Toolbar>
@@ -36,9 +36,9 @@
                         selectedKey="0"
                         selectionChange=".onSetSelectedGenre"
                         items="{
-                            path: 'books>/genres'
+                            path: 'booksModel>/genres'
                         }">
-                        <core:Item key="{books>key}" text="{books>title}" />
+                        <core:Item key="{booksModel>key}" text="{booksModel>title}" />
                     </ComboBox>
                     <ToolbarSpacer/>
                     <Button text="{i18n>buttonFilter}" press="onFilterTable" />
@@ -70,7 +70,7 @@
                 </Column>
                 <Column
                     hAlign="End"
-                    width="5em"
+                    width="10em"
                     minScreenWidth="Small"
                     demandPopin="true">
                     <Text text="{i18n>columnActions}" />
@@ -81,43 +81,42 @@
                     <cells>
                         <FlexBox>
                             <ObjectIdentifier 
-                                visible="{= !${books>isEditable}}" 
-                                title="{books>currentName}"
+                                visible="{= !${booksModel>isEditable}}" 
+                                title="{booksModel>Name}"
                                 />
                             <Input
-                                visible="{books>isEditable}"
-                                value="{books>currentName}"
-                                liveChange=".onChangeBookName"
+                                visible="{booksModel>isEditable}"
+                                value="{booksModel>Name}"
                                 />
-                            <Button 
-                                text="{i18n>buttonCancel}"
-                                visible="{books>isEditable}"
-                                press="onCancelUpdateTitle"/>
                         </FlexBox>
-                        <Text text="{books>Author}" />
-                        <Text text="{books>Genre/title}" />
+                        <Text text="{booksModel>Author}" />
+                        <Text text="{booksModel>Genre/title}" />
                         <Text
                             core:require="{
                                 Formatter: 'project1/model/formatter'
                             }"
                             text="{
                                     parts: [
-                                        'books>ReleaseDate'
+                                        'booksModel>ReleaseDate'
                                     ],
                                     formatter: 'Formatter.rormatDate.bind($controller)'
                             }"/>
                         <ObjectNumber
-                            number="{books>AvailableQuantity}"
+                            number="{booksModel>AvailableQuantity}"
                             emphasized="false"/>
-                        <FlexBox>
+                        <FlexBox justifyContent="{= !${booksModel>isEditable} ? 'End' : 'SpaceBetween'}">
                             <Button 
                                 text="{i18n>buttonEdit}"
-                                visible="{= !${books>isEditable}}"
+                                visible="{= !${booksModel>isEditable}}"
                                 press="onEditTitle"/>
                             <Button 
                                 text="{i18n>buttonSave}"
-                                visible="{books>isEditable}"
+                                visible="{booksModel>isEditable}"
                                 press="onSaveTitle"/>
+                            <Button 
+                                text="{i18n>buttonCancel}"
+                                visible="{booksModel>isEditable}"
+                                press="onCancelUpdateTitle"/>
                         </FlexBox>
                     </cells>
                 </ColumnListItem>

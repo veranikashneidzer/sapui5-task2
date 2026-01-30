@@ -58,14 +58,17 @@ sap.ui.define([
 
       const aGenres = [{ key: 0, title: 'All' }, ...Array.from(new Set(aBooks.map(book => book.Genre))).map((genre, index) => ({ key: index + 1, title: genre }))];
 
+      const oInitialBookModel = aBooks.map(book => ({ ...book, Genre: aGenres.find(genre => genre.title === book.Genre) }));
+      
       this.oBookModel = new JSONModel({
-        books: aBooks.map(book => ({ ...book, Genre: aGenres.find(genre => genre.title === book.Genre), currentName: book.Name })),
+        initialBooks: [...oInitialBookModel].map(bookData => ({...bookData})),
+        currentBooks: oInitialBookModel,
         genres: aGenres,
         searchedName: '',
         selectedGenre: '',
       });
 
-      this.getView().setModel(this.oBookModel, "books");
+      this.getView().setModel(this.oBookModel, "booksModel");
     },
 
     onAddRecord() {
@@ -73,15 +76,19 @@ sap.ui.define([
       const oBinding = oList.getBinding("items");
       const oModel = this.getBooksModel();
 
-      oModel.setProperty("/books", [...oBinding.getContexts().map(el => el.getObject()), {
+      const aUpdatedBooksList = [...oBinding.getContexts().map(el => el.getObject()), {
         ID: `${Math.floor(Math.random() * 10000)}`,
         Name: "",
         Author: "",
         Genre: "",
         ReleaseDate: new Date(),
-        AvailableQuantity: 0
+        AvailableQuantity: 0,
+        isEditable: true
       }
-      ]);
+      ];
+
+      oModel.setProperty("/currentBooks", aUpdatedBooksList);
+      oModel.setProperty("/initialBooks", [...aUpdatedBooksList]);
       oList.removeSelections();
     },
 
@@ -99,7 +106,8 @@ sap.ui.define([
       });
 
       const oModel = this.getBooksModel();
-      oModel.setProperty("/books", aUpdatedBooksList);
+      oModel.setProperty("/currentBooks", aUpdatedBooksList);
+      oModel.setProperty("/initialBooks", [...aUpdatedBooksList]);
       oList.removeSelections();
     },
 
@@ -140,25 +148,27 @@ sap.ui.define([
 
     onEditTitle(oEvent) {
       const oModel = this.getBooksModel();
-      const oBookData = oEvent.getSource().getBindingContext("books").getObject();
-      const oBooksData = oModel.getProperty("/books");
-      oModel.setProperty("/books", oBooksData.map(bookData => (bookData.ID === oBookData.ID) ? {...oBookData, isEditable: true } : bookData));
+      const sBookPath = oEvent.getSource().getBindingContext("booksModel").getPath();
+      oModel.setProperty(`${sBookPath}/isEditable`, true);
     },
 
     onSaveTitle(oEvent) {
       const oModel = this.getBooksModel();
-      const oNewBookData = oEvent.getSource().getBindingContext("books").getObject();
-      const oBooksData = oModel.getProperty("/books");
+      const sBookPath = oEvent.getSource().getBindingContext("booksModel").getPath();
 
-      oModel.setProperty("/books", oBooksData.map(bookData => (bookData.ID === oNewBookData.ID) ? { ...oNewBookData, isEditable: false, Name: oNewBookData.currentName } : bookData));
+      oModel.setProperty(`${sBookPath}/isEditable`, false);
+
+      const oBooksData = oModel.getProperty("/currentBooks");
+      oModel.setProperty("/initialBooks", [...oBooksData].map(bookData => ({...bookData})));
     },
 
     onCancelUpdateTitle(oEvent) {
       const oModel = this.getBooksModel();
-      const oNewBookData = oEvent.getSource().getBindingContext("books").getObject();
-      const oBooksData = oModel.getProperty("/books");
+      const sBookPath = oEvent.getSource().getBindingContext("booksModel").getPath();
+      oModel.setProperty(`${sBookPath}/isEditable`, false);
 
-      oModel.setProperty("/books", oBooksData.map(bookData => (bookData.ID === oNewBookData.ID) ? { ...bookData, isEditable: false, currentName: oNewBookData.Name } : bookData));
+      const oBooksData = oModel.getProperty("/initialBooks");
+      oModel.setProperty("/currentBooks", [...oBooksData].map(bookData => ({...bookData})));
     }
   });
 });

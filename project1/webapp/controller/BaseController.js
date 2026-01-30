@@ -5,7 +5,7 @@ sap.ui.define([
 
     return Controller.extend("project1.controller.BaseController", {
         getBooksModel() {
-            return this.getView().getModel("books");
+            return this.getView().getModel("booksModel");
         },
     });
 });
