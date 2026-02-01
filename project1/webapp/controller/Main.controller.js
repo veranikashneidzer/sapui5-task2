@@ -2,9 +2,12 @@ sap.ui.define([
   "project1/controller/BaseController",
   "sap/ui/model/json/JSONModel",
   "sap/ui/model/Filter",
-  "sap/ui/model/FilterOperator"
-], (BaseController, JSONModel, Filter, FilterOperator) => {
+  "sap/ui/model/FilterOperator",
+  "sap/m/MessageToast"
+], (BaseController, JSONModel, Filter, FilterOperator, MessageToast) => {
   "use strict";
+
+  const CONFIRMATION_TEXT_YES = "yes";
 
   return BaseController.extend("project1.controller.Main", {
     onInit() {
@@ -59,9 +62,9 @@ sap.ui.define([
       const aGenres = [{ key: 0, title: 'All' }, ...Array.from(new Set(aBooks.map(book => book.Genre))).map((genre, index) => ({ key: index + 1, title: genre }))];
 
       const oInitialBookModel = aBooks.map(book => ({ ...book, Genre: aGenres.find(genre => genre.title === book.Genre) }));
-      
+
       this.oBookModel = new JSONModel({
-        initialBooks: [...oInitialBookModel].map(bookData => ({...bookData})),
+        initialBooks: [...oInitialBookModel].map(bookData => ({ ...bookData })),
         currentBooks: oInitialBookModel,
         genres: aGenres,
         searchedName: '',
@@ -159,7 +162,7 @@ sap.ui.define([
       oModel.setProperty(`${sBookPath}/isEditable`, false);
 
       const oBooksData = oModel.getProperty("/currentBooks");
-      oModel.setProperty("/initialBooks", [...oBooksData].map(bookData => ({...bookData})));
+      oModel.setProperty("/initialBooks", [...oBooksData].map(bookData => ({ ...bookData })));
     },
 
     onCancelUpdateTitle(oEvent) {
@@ -168,7 +171,34 @@ sap.ui.define([
       oModel.setProperty(`${sBookPath}/isEditable`, false);
 
       const oBooksData = oModel.getProperty("/initialBooks");
-      oModel.setProperty("/currentBooks", [...oBooksData].map(bookData => ({...bookData})));
+      oModel.setProperty("/currentBooks", [...oBooksData].map(bookData => ({ ...bookData })));
+    },
+
+    async onOpenDialog(oEvent) {
+      const oList = this.byId("booksList");
+      const bIsItemSelected = !!oList?.getSelectedContexts()?.length;
+
+      if (bIsItemSelected) {
+        this.oDialog ??= await this.loadFragment({
+          name: "project1.view.ConfirmationDioalog"
+        });
+
+        this.oDialog.open();
+      } else {
+        const oBundle = this.getView().getModel("i18n").getResourceBundle();
+        const sMsg = oBundle.getText("confirmationDialogSelectItemError");
+
+        MessageToast.show(sMsg);
+      }
+
+    },
+
+    onCloseDialog(oEvent) {
+      if (oEvent.getSource().getProperty("text").toLowerCase() === CONFIRMATION_TEXT_YES) {
+        this.onDeleteRecord(oEvent);
+      }
+
+      this.byId("confirmationDialog").close();
     }
   });
 });

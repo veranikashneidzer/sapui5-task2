@@ -22,7 +22,7 @@
                     <ToolbarSpacer/>
                     <Button
                         text="{i18n>buttonDeleteRecord}"
-                        press="onDeleteRecord">
+                        press=".onOpenDialog">
                         <layoutData>
                             <FlexItemData growFactor="1" />
                         </layoutData>
