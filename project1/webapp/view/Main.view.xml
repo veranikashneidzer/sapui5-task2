@@ -15,7 +15,7 @@
                 <Toolbar>
                     <Button 
                         text="{i18n>buttonAddRecord}"
-						press="onAddRecord">
+						press=".onOpenBookCreationDialog">
                     </Button>
                     <ToolbarSpacer/>
                     <Button

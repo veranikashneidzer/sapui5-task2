@@ -3,9 +3,11 @@ sap.ui.define([
   "sap/ui/model/json/JSONModel",
   "sap/ui/model/Filter",
   "sap/ui/model/FilterOperator",
-  "sap/m/MessageBox"
-], (BaseController, JSONModel, Filter, FilterOperator, MessageBox) => {
+  "sap/m/MessageBox",
+  "sap/base/Log"
+], (BaseController, JSONModel, Filter, FilterOperator, MessageBox, Log) => {
   "use strict";
+
   return BaseController.extend("project1.controller.Main", {
     onInit() {
       const aBooks = [
@@ -67,24 +69,25 @@ sap.ui.define([
         searchedName: '',
         selectedGenre: '',
         booksSelectedItems: [],
+        newBookData: {},
       });
 
       this.getView().setModel(this.oBookModel, "booksModel");
     },
 
-    onAddRecord() {
+    onAddRecord({ name, author, genre, availableQuantity, releaseDate }) {
       const oList = this.byId("booksList");
       const oBinding = oList.getBinding("items");
       const oModel = this.getBooksModel();
 
       const aUpdatedBooksList = [...oBinding.getContexts().map(el => el.getObject()), {
         ID: `${Math.floor(Math.random() * 10000)}`,
-        Name: "",
-        Author: "",
-        Genre: "",
-        ReleaseDate: new Date(),
-        AvailableQuantity: 0,
-        isEditable: true
+        Name: name,
+        Author: author,
+        Genre: genre,
+        ReleaseDate: new Date(releaseDate),
+        AvailableQuantity: availableQuantity,
+        isEditable: false
       }
       ];
 
@@ -188,6 +191,71 @@ sap.ui.define([
     onBooksTableSelectedItemsChanged(oEvent) {
       const oModel = this.getBooksModel();
       oModel.setProperty("/booksSelectedItems", oEvent.getSource().getSelectedItems());
+    },
+
+    async onOpenBookCreationDialog() {
+      try {
+        this.oBookCreationDialog ??= await this.loadFragment({
+          name: "project1.view.BookCreationDialog"
+        });
+
+        this.oBookCreationDialog.open();
+      } catch {
+        Log.error("Cannot load book creation dialog");
+      }
+    },
+
+    onSubmitBookCreation() {
+      const oModel = this.getBooksModel();
+      
+      const name = oModel.getProperty("/newBookData/Name");
+      const author = oModel.getProperty("/newBookData/Author");
+      const genre = oModel.getProperty("/newBookData/Genre");
+      const releaseDate = oModel.getProperty("/newBookData/ReleaseDate");
+      const availableQuantity = oModel.getProperty("/newBookData/AvailableQuantity");
+
+      if (!name || !author || !genre || !releaseDate || !availableQuantity) {
+        const oBundle = this.getView().getModel("i18n").getResourceBundle();
+        let sMsg = oBundle.getText("bookCreationDialogAddItemError");
+
+        if (!releaseDate) {
+          sMsg = oBundle.getText("bookCreationDialogReleaseDateError");
+        }
+
+        MessageToast.show(sMsg);
+      } else {
+        this.onAddRecord({ name, author, genre, availableQuantity, releaseDate });
+        this.byId("bookCreationDialog").close();
+      }
+    },
+
+    onCancelBookCreation() {
+      this.byId("bookCreationDialog").close();
+    },
+
+    onChangeBookCreationDialogNameInput(oEvent) {
+      const oModel = this.getBooksModel();
+      oModel.setProperty("/newBookData/Name", oEvent.getSource().getValue());
+    },
+
+    onChangeBookCreationDialogAuthorInput(oEvent) {
+      const oModel = this.getBooksModel();
+      oModel.setProperty("/newBookData/Author", oEvent.getSource().getValue());
+    },
+
+    onChangeBookCreationDialogGenreInput(oEvent) {
+      const oModel = this.getBooksModel();
+      oModel.setProperty("/newBookData/Genre", oEvent.getSource().getValue());
+    },
+
+    onChangeBookCreationDialogReleaseDateInput(oEvent) {
+      const oModel = this.getBooksModel();
+      oModel.setProperty("/newBookData/ReleaseDate", oEvent.getSource().getValue());
+    },
+
+    onChangeBookCreationDialogAvailableQuantityInput(oEvent) {
+      const oModel = this.getBooksModel();
+      oModel.setProperty("/newBookData/AvailableQuantity", oEvent.getSource().getValue());
     }
   });
 });
