@@ -95,7 +95,7 @@
                                     parts: [
                                         'booksModel>ReleaseDate'
                                     ],
-                                    formatter: 'Formatter.rormatDate.bind($controller)'
+                                    formatter: 'Formatter.formatDate.bind($controller)'
                             }"/>
                         <ObjectNumber
                             number="{booksModel>AvailableQuantity}"
