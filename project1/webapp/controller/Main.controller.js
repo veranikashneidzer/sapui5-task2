@@ -3,12 +3,9 @@ sap.ui.define([
   "sap/ui/model/json/JSONModel",
   "sap/ui/model/Filter",
   "sap/ui/model/FilterOperator",
-  "sap/m/MessageToast"
-], (BaseController, JSONModel, Filter, FilterOperator, MessageToast) => {
+  "sap/m/MessageBox"
+], (BaseController, JSONModel, Filter, FilterOperator, MessageBox) => {
   "use strict";
-
-  const CONFIRMATION_TEXT_YES = "yes";
-
   return BaseController.extend("project1.controller.Main", {
     onInit() {
       const aBooks = [
@@ -69,6 +66,7 @@ sap.ui.define([
         genres: aGenres,
         searchedName: '',
         selectedGenre: '',
+        booksSelectedItems: [],
       });
 
       this.getView().setModel(this.oBookModel, "booksModel");
@@ -174,31 +172,22 @@ sap.ui.define([
       oModel.setProperty("/currentBooks", [...oBooksData].map(bookData => ({ ...bookData })));
     },
 
-    async onOpenDialog(oEvent) {
-      const oList = this.byId("booksList");
-      const bIsItemSelected = !!oList?.getSelectedContexts()?.length;
+    onOpenDeletionRecordConfirmationDialog(oEvent) {
+      const oBundle = this.getView().getModel("i18n").getResourceBundle();
 
-      if (bIsItemSelected) {
-        this.oDialog ??= await this.loadFragment({
-          name: "project1.view.ConfirmationDioalog"
-        });
-
-        this.oDialog.open();
-      } else {
-        const oBundle = this.getView().getModel("i18n").getResourceBundle();
-        const sMsg = oBundle.getText("confirmationDialogSelectItemError");
-
-        MessageToast.show(sMsg);
-      }
-
+      MessageBox.confirm(oBundle.getText("confirmationDialogText"), {
+        actions: [MessageBox.Action.YES, MessageBox.Action.CLOSE],
+        onClose: (sAction) => {
+          if (sAction === MessageBox.Action.YES) {
+            this.onDeleteRecord(oEvent);
+          }
+        },
+      });
     },
 
-    onCloseDialog(oEvent) {
-      if (oEvent.getSource().getProperty("text").toLowerCase() === CONFIRMATION_TEXT_YES) {
-        this.onDeleteRecord(oEvent);
-      }
-
-      this.byId("confirmationDialog").close();
+    onBooksTableSelectedItemsChanged(oEvent) {
+      const oModel = this.getBooksModel();
+      oModel.setProperty("/booksSelectedItems", oEvent.getSource().getSelectedItems());
     }
   });
 });
