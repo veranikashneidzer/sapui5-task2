@@ -7,6 +7,7 @@
             id="booksList"
             width="auto"
             mode="MultiSelect"
+            selectionChange=".onBooksTableSelectedItemsChanged"
             items="{
                 path: 'booksModel>/currentBooks'
             }">
@@ -15,17 +16,12 @@
                     <Button 
                         text="{i18n>buttonAddRecord}"
 						press="onAddRecord">
-                        <layoutData>
-                            <FlexItemData growFactor="1" />
-                        </layoutData>
                     </Button>
                     <ToolbarSpacer/>
                     <Button
                         text="{i18n>buttonDeleteRecord}"
-                        press="onDeleteRecord">
-                        <layoutData>
-                            <FlexItemData growFactor="1" />
-                        </layoutData>
+                        enabled="{= Boolean(${booksModel>/booksSelectedItems}.length)}"
+                        press=".onOpenDeletionRecordConfirmationDialog">
                     </Button>
                     <Input
                         width="50%"

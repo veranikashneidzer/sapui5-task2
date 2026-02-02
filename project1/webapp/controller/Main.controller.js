@@ -2,10 +2,10 @@ sap.ui.define([
   "project1/controller/BaseController",
   "sap/ui/model/json/JSONModel",
   "sap/ui/model/Filter",
-  "sap/ui/model/FilterOperator"
-], (BaseController, JSONModel, Filter, FilterOperator) => {
+  "sap/ui/model/FilterOperator",
+  "sap/m/MessageBox"
+], (BaseController, JSONModel, Filter, FilterOperator, MessageBox) => {
   "use strict";
-
   return BaseController.extend("project1.controller.Main", {
     onInit() {
       const aBooks = [
@@ -59,13 +59,14 @@ sap.ui.define([
       const aGenres = [{ key: 0, title: 'All' }, ...Array.from(new Set(aBooks.map(book => book.Genre))).map((genre, index) => ({ key: index + 1, title: genre }))];
 
       const oInitialBookModel = aBooks.map(book => ({ ...book, Genre: aGenres.find(genre => genre.title === book.Genre) }));
-      
+
       this.oBookModel = new JSONModel({
-        initialBooks: [...oInitialBookModel].map(bookData => ({...bookData})),
+        initialBooks: [...oInitialBookModel].map(bookData => ({ ...bookData })),
         currentBooks: oInitialBookModel,
         genres: aGenres,
         searchedName: '',
         selectedGenre: '',
+        booksSelectedItems: [],
       });
 
       this.getView().setModel(this.oBookModel, "booksModel");
@@ -159,7 +160,7 @@ sap.ui.define([
       oModel.setProperty(`${sBookPath}/isEditable`, false);
 
       const oBooksData = oModel.getProperty("/currentBooks");
-      oModel.setProperty("/initialBooks", [...oBooksData].map(bookData => ({...bookData})));
+      oModel.setProperty("/initialBooks", [...oBooksData].map(bookData => ({ ...bookData })));
     },
 
     onCancelUpdateTitle(oEvent) {
@@ -168,7 +169,25 @@ sap.ui.define([
       oModel.setProperty(`${sBookPath}/isEditable`, false);
 
       const oBooksData = oModel.getProperty("/initialBooks");
-      oModel.setProperty("/currentBooks", [...oBooksData].map(bookData => ({...bookData})));
+      oModel.setProperty("/currentBooks", [...oBooksData].map(bookData => ({ ...bookData })));
+    },
+
+    onOpenDeletionRecordConfirmationDialog(oEvent) {
+      const oBundle = this.getView().getModel("i18n").getResourceBundle();
+
+      MessageBox.confirm(oBundle.getText("confirmationDialogText"), {
+        actions: [MessageBox.Action.YES, MessageBox.Action.CLOSE],
+        onClose: (sAction) => {
+          if (sAction === MessageBox.Action.YES) {
+            this.onDeleteRecord(oEvent);
+          }
+        },
+      });
+    },
+
+    onBooksTableSelectedItemsChanged(oEvent) {
+      const oModel = this.getBooksModel();
+      oModel.setProperty("/booksSelectedItems", oEvent.getSource().getSelectedItems());
     }
   });
 });
