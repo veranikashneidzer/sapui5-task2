@@ -1,0 +1,63 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Table
+        id="booksListV2"
+        width="auto"
+        mode="MultiSelect"
+        selectionChange=".onBooksTableSelectedItemsChanged"
+        items="{
+            path: 'oDataV2>/Products'
+        }">
+        <columns>
+            <Column>
+                <Text text="{i18n>columnName}" />
+            </Column>
+            <Column
+                minScreenWidth="Small"
+                demandPopin="true">
+                <Text text="{i18n>columnDescription}" />
+            </Column>
+            <Column
+                minScreenWidth="Small"
+                demandPopin="true">
+                <Text text="{i18n>columnReleaseDate}" />
+            </Column>
+            <Column
+                minScreenWidth="Small"
+                demandPopin="true">
+                <Text text="{i18n>columnDiscontinuedDate}" />
+            </Column>
+            <Column
+                minScreenWidth="Small"
+                demandPopin="true">
+                <Text text="{i18n>columnRating}" />
+            </Column>
+            <Column
+                hAlign="End"
+                width="10em"
+                minScreenWidth="Small"
+                demandPopin="true">
+                <Text text="{i18n>columnPrice}" />
+            </Column>
+        </columns>
+        <items>
+            <ColumnListItem>
+                <cells>
+                    <ObjectIdentifier 
+                        title="{oDataV2>Name}" />
+                    <Text
+                        text="{oDataV2>Description}" />
+                    <Text
+                        text="{oDataV2>ReleaseDate}" />
+                    <Text
+                        text="{oDataV2>DiscontinuedDate}"/>
+                    <Text
+                        text="{oDataV2>Rating}"/>
+                    <Text
+                        text="{oDataV2>Price}"/>
+                </cells>
+            </ColumnListItem>
+        </items>
+    </Table>
+</core:FragmentDefinition>
