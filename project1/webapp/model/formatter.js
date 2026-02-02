@@ -10,8 +10,7 @@ sap.ui.define([
 				format: "yyyy"
 			});
 			const sFormattedDate = UI5Date.getInstance(sDate);
-			const temp = oDateFormat.format(sFormattedDate)
-			return `Published: ${temp}`;
+			return oDateFormat.format(sFormattedDate);
 		}
 	};
 });
