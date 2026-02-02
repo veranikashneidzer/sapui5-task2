@@ -16,16 +16,16 @@
       "toolsId": "4809c35b-1e11-4163-b8a5-2dcfca1e65bf"
     },
     "dataSources": {
-      "oDataV2": {
-        "uri": "/bookshopV2/",
+      "ODataV2": {
+        "uri": "/V2/OData/OData.svc/",
         "type": "OData",
         "settings": {
           "odataVersion": "2.0",
           "localUri": "localService/metadataV2.xml"
         }
       },
-      "oDataV4": {
-        "uri": "/bookshopV4/",
+      "ODataV4": {
+        "uri": "/V4/OData/OData.svc/",
         "type": "OData",
         "settings": {
           "odataVersion": "4.0",
@@ -74,12 +74,12 @@
         }
       },
       "oDataV2": {
-        "type": "sap.ui.model.odata.v2.oDataModel",
-        "dataSource": "oDataV2"
+        "type": "sap.ui.model.odata.v2.ODataModel",
+        "dataSource": "ODataV2"
       },
       "oDataV4": {
-        "type": "sap.ui.model.odata.v4.oDataModel",
-        "dataSource": "oDataV4"
+        "type": "sap.ui.model.odata.v4.ODataModel",
+        "dataSource": "ODataV4"
       }
     },
     "resources": {

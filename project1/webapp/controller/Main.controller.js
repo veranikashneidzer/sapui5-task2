@@ -196,7 +196,7 @@ sap.ui.define([
     async onOpenBookCreationDialog() {
       try {
         this.oBookCreationDialog ??= await this.loadFragment({
-          name: "project1.view.BookCreationDialog"
+          name: "project1.view.fragments.BookCreationDialog"
         });
 
         this.oBookCreationDialog.open();
