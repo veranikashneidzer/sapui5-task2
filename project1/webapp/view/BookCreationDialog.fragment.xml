@@ -1,0 +1,43 @@
+<core:FragmentDefinition
+   xmlns="sap.m"
+   xmlns:core="sap.ui.core" >
+   <Dialog
+        id="bookCreationDialog"
+        title ="{i18n>bookCreationDialogHeaderText}"
+        class="sapUiResponsivePadding--content sapUiResponsivePadding--header sapUiResponsivePadding--footer sapUiResponsivePadding--subHeader">
+        <content>
+            <Input
+                value="{booksModel>name}"
+                placeholder="{i18n>bookCreationDialogNamePlaceholder}"
+                />
+            <Input
+                value="{booksModel>author}"
+                placeholder="{i18n>bookCreationDialogAuthorPlaceholder}"
+                />
+            <Input
+                value="{booksModel>genre}"
+                placeholder="{i18n>bookCreationDialogGenrePlaceholder}"
+                />
+            <Input
+                type="Date"
+                value="{booksModel>releaseDate}"
+                placeholder="{i18n>bookCreationDialogReleaseDatePlaceholder}"
+                />
+            <Input
+                type="Number"
+                value="{booksModel>availableQuantity}"
+                placeholder="{i18n>bookCreationDialogAvailableQuantityPlaceholder}"
+                />
+        </content>
+        <beginButton>
+            <Button
+                text="{i18n>dialogAddButtonText}"
+                press=".onSubmitBookCreation"/>
+        </beginButton>
+        <endButton>
+            <Button
+                text="{i18n>dialogCancelButtonText}"
+                press=".onCancelBookCreation"/>
+        </endButton>
+   </Dialog>
+</core:FragmentDefinition>
