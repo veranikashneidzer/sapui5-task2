@@ -3,28 +3,29 @@
    xmlns:core="sap.ui.core" >
    <Dialog
         id="bookCreationDialog"
-        title ="{i18n>bookCreationDialogHeaderText}">
+        title ="{i18n>bookCreationDialogHeaderText}"
+        class="sapUiResponsivePadding--content sapUiResponsivePadding--header sapUiResponsivePadding--footer sapUiResponsivePadding--subHeader">
         <content>
             <Input
-                liveChange="onChangeBookCreationDialogNameInput"
+                value="{booksModel>name}"
                 placeholder="{i18n>bookCreationDialogNamePlaceholder}"
                 />
             <Input
-                liveChange="onChangeBookCreationDialogAuthorInput"
+                value="{booksModel>author}"
                 placeholder="{i18n>bookCreationDialogAuthorPlaceholder}"
                 />
             <Input
-                liveChange="onChangeBookCreationDialogGenreInput"
+                value="{booksModel>genre}"
                 placeholder="{i18n>bookCreationDialogGenrePlaceholder}"
                 />
             <Input
                 type="Date"
-                liveChange="onChangeBookCreationDialogReleaseDateInput"
+                value="{booksModel>releaseDate}"
                 placeholder="{i18n>bookCreationDialogReleaseDatePlaceholder}"
                 />
             <Input
                 type="Number"
-                liveChange="onChangeBookCreationDialogAvailableQuantityInput"
+                value="{booksModel>availableQuantity}"
                 placeholder="{i18n>bookCreationDialogAvailableQuantityPlaceholder}"
                 />
         </content>

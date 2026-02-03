@@ -73,26 +73,27 @@ sap.ui.define([
       });
 
       this.getView().setModel(this.oBookModel, "booksModel");
+
+      this.oModel = this.getBooksModel();
     },
 
     onAddRecord({ name, author, genre, availableQuantity, releaseDate }) {
       const oList = this.byId("booksList");
       const oBinding = oList.getBinding("items");
-      const oModel = this.getBooksModel();
 
       const aUpdatedBooksList = [...oBinding.getContexts().map(el => el.getObject()), {
         ID: `${Math.floor(Math.random() * 10000)}`,
         Name: name,
         Author: author,
-        Genre: genre,
+        Genre: ({ key: oBinding.getContexts().length + 1, title: genre }),
         ReleaseDate: new Date(releaseDate),
         AvailableQuantity: availableQuantity,
         isEditable: false
       }
       ];
 
-      oModel.setProperty("/currentBooks", aUpdatedBooksList);
-      oModel.setProperty("/initialBooks", [...aUpdatedBooksList]);
+      this.oModel.setProperty("/currentBooks", aUpdatedBooksList);
+      this.oModel.setProperty("/initialBooks", [...aUpdatedBooksList]);
       oList.removeSelections();
     },
 
@@ -109,28 +110,24 @@ sap.ui.define([
         }
       });
 
-      const oModel = this.getBooksModel();
-      oModel.setProperty("/currentBooks", aUpdatedBooksList);
-      oModel.setProperty("/initialBooks", [...aUpdatedBooksList]);
+      this.oModel.setProperty("/currentBooks", aUpdatedBooksList);
+      this.oModel.setProperty("/initialBooks", [...aUpdatedBooksList]);
       oList.removeSelections();
     },
 
     onSetSearchedName(oEvent) {
       const sValue = oEvent.getSource().getValue();
-      const oModel = this.getBooksModel();
-      oModel.setProperty("/searchedName", sValue);
+      this.oModel.setProperty("/searchedName", sValue);
     },
 
     onSetSelectedGenre(oEvent) {
       const selectedKey = oEvent.getSource()?.getSelectedKey();
-      const oModel = this.getBooksModel();
-      oModel.setProperty("/selectedGenre", selectedKey);
+      this.oModel.setProperty("/selectedGenre", selectedKey);
     },
 
     onFilterTable() {
-      const oModel = this.getBooksModel();
-      const sSelectedGenre = oModel.getData().selectedGenre;
-      const sSearchedName = oModel.getData().searchedName;
+      const sSelectedGenre = this.oModel.getData().selectedGenre;
+      const sSearchedName = this.oModel.getData().searchedName;
 
       const oList = this.byId("booksList");
       const oBinding = oList.getBinding("items");
@@ -151,28 +148,24 @@ sap.ui.define([
     },
 
     onEditTitle(oEvent) {
-      const oModel = this.getBooksModel();
       const sBookPath = oEvent.getSource().getBindingContext("booksModel").getPath();
-      oModel.setProperty(`${sBookPath}/isEditable`, true);
+      this.oModel.setProperty(`${sBookPath}/isEditable`, true);
     },
 
     onSaveTitle(oEvent) {
-      const oModel = this.getBooksModel();
       const sBookPath = oEvent.getSource().getBindingContext("booksModel").getPath();
+      this.oModel.setProperty(`${sBookPath}/isEditable`, false);
 
-      oModel.setProperty(`${sBookPath}/isEditable`, false);
-
-      const oBooksData = oModel.getProperty("/currentBooks");
-      oModel.setProperty("/initialBooks", [...oBooksData].map(bookData => ({ ...bookData })));
+      const oBooksData = this.oModel.getProperty("/currentBooks");
+      this.oModel.setProperty("/initialBooks", [...oBooksData].map(bookData => ({ ...bookData })));
     },
 
     onCancelUpdateTitle(oEvent) {
-      const oModel = this.getBooksModel();
       const sBookPath = oEvent.getSource().getBindingContext("booksModel").getPath();
-      oModel.setProperty(`${sBookPath}/isEditable`, false);
+      this.oModel.setProperty(`${sBookPath}/isEditable`, false);
 
-      const oBooksData = oModel.getProperty("/initialBooks");
-      oModel.setProperty("/currentBooks", [...oBooksData].map(bookData => ({ ...bookData })));
+      const oBooksData = this.oModel.getProperty("/initialBooks");
+      this.oModel.setProperty("/currentBooks", [...oBooksData].map(bookData => ({ ...bookData })));
     },
 
     onOpenDeletionRecordConfirmationDialog(oEvent) {
@@ -189,15 +182,23 @@ sap.ui.define([
     },
 
     onBooksTableSelectedItemsChanged(oEvent) {
-      const oModel = this.getBooksModel();
-      oModel.setProperty("/booksSelectedItems", oEvent.getSource().getSelectedItems());
+      this.oModel.setProperty("/booksSelectedItems", oEvent.getSource().getSelectedItems());
     },
 
     async onOpenBookCreationDialog() {
+      this.oModel.setProperty("/newBookData", {});
+
       try {
-        this.oBookCreationDialog ??= await this.loadFragment({
-          name: "project1.view.BookCreationDialog"
-        });
+        if (!this.oBookCreationDialog) {
+          this.oBookCreationDialog ??= await this.loadFragment({
+            name: "project1.view.BookCreationDialog"
+          });
+
+          this.oBookCreationDialog.bindElement({
+            path: "/newBookData",
+            model: "booksModel"
+          });
+        }
 
         this.oBookCreationDialog.open();
       } catch {
@@ -206,13 +207,7 @@ sap.ui.define([
     },
 
     onSubmitBookCreation() {
-      const oModel = this.getBooksModel();
-      
-      const name = oModel.getProperty("/newBookData/Name");
-      const author = oModel.getProperty("/newBookData/Author");
-      const genre = oModel.getProperty("/newBookData/Genre");
-      const releaseDate = oModel.getProperty("/newBookData/ReleaseDate");
-      const availableQuantity = oModel.getProperty("/newBookData/AvailableQuantity");
+      const { name, author, genre, releaseDate, availableQuantity } = this.oModel.getProperty("/newBookData");
 
       if (!name || !author || !genre || !releaseDate || !availableQuantity) {
         const oBundle = this.getView().getModel("i18n").getResourceBundle();
@@ -225,37 +220,12 @@ sap.ui.define([
         MessageToast.show(sMsg);
       } else {
         this.onAddRecord({ name, author, genre, availableQuantity, releaseDate });
-        this.byId("bookCreationDialog").close();
+        this.oBookCreationDialog.close();
       }
     },
 
     onCancelBookCreation() {
-      this.byId("bookCreationDialog").close();
+      this.oBookCreationDialog.close();
     },
-
-    onChangeBookCreationDialogNameInput(oEvent) {
-      const oModel = this.getBooksModel();
-      oModel.setProperty("/newBookData/Name", oEvent.getSource().getValue());
-    },
-
-    onChangeBookCreationDialogAuthorInput(oEvent) {
-      const oModel = this.getBooksModel();
-      oModel.setProperty("/newBookData/Author", oEvent.getSource().getValue());
-    },
-
-    onChangeBookCreationDialogGenreInput(oEvent) {
-      const oModel = this.getBooksModel();
-      oModel.setProperty("/newBookData/Genre", oEvent.getSource().getValue());
-    },
-
-    onChangeBookCreationDialogReleaseDateInput(oEvent) {
-      const oModel = this.getBooksModel();
-      oModel.setProperty("/newBookData/ReleaseDate", oEvent.getSource().getValue());
-    },
-
-    onChangeBookCreationDialogAvailableQuantityInput(oEvent) {
-      const oModel = this.getBooksModel();
-      oModel.setProperty("/newBookData/AvailableQuantity", oEvent.getSource().getValue());
-    }
   });
 });
