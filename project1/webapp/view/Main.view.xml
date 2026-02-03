@@ -91,11 +91,11 @@
                             core:require="{
                                 Formatter: 'project1/model/formatter'
                             }"
-                            text="{
+                            text="{i18n>cellPublished}: {
                                     parts: [
                                         'booksModel>ReleaseDate'
                                     ],
-                                    formatter: 'Formatter.rormatDate.bind($controller)'
+                                    formatter: 'Formatter.formatDate'
                             }"/>
                         <ObjectNumber
                             number="{booksModel>AvailableQuantity}"

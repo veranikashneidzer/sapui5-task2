@@ -5,11 +5,12 @@ sap.ui.define([
 	"use strict";
 
 	return {
-		rormatDate(sDate) {
+		formatDate(sDate) {
 			const oDateFormat = DateFormat.getInstance({
-				relative: true
+				format: "yyyy"
 			});
-			return oDateFormat.format(UI5Date.getInstance(sDate));
+			const sFormattedDate = UI5Date.getInstance(sDate);
+			return oDateFormat.format(sFormattedDate);
 		}
 	};
 });
