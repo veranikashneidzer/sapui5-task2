@@ -7,5 +7,9 @@ sap.ui.define([
         getBooksModel() {
             return this.getView().getModel("booksModel");
         },
+
+        getODataV2BooksModel() {
+            return this.getView().getModel("oDataV2BooksModel");
+        },
     });
 });
