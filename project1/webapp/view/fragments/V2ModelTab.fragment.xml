@@ -49,9 +49,15 @@
                     <Text
                         text="{oDataV2>Description}" />
                     <Text
-                        text="{oDataV2>ReleaseDate}" />
+                        text="{
+                            path: 'oDataV2>ReleaseDate',
+                            type: 'sap.ui.model.odata.type.DateTime'
+                        }" />
                     <Text
-                        text="{oDataV2>DiscontinuedDate}"/>
+                        text="{
+                            path: 'oDataV2>DiscontinuedDate',
+                            type: 'sap.ui.model.odata.type.DateTime'
+                        }"/>
                     <Text
                         text="{oDataV2>Rating}"/>
                     <Text
