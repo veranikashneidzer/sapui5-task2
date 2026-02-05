@@ -36,12 +36,15 @@ sap.ui.define([
     },
 
     async onOpenProductCreationV2Dialog() {
-      this.oConfigModel.setProperty("/newProductData", {});
+      this.oConfigModel.setProperty("/newProductData", {
+        isEditable: false
+      });
 
       try {
         if (!this.oProductCreationDialog) {
           this.oProductCreationV2Dialog ??= await this.loadFragment({
-            name: "project1.view.fragments.ProductCreationV2Dialog"
+            name: "project1.view.fragments.ProductCreationV2Dialog",
+            id: 'productCreationV2Dialog',
           });
 
           this.oProductCreationV2Dialog.bindElement({
@@ -87,16 +90,70 @@ sap.ui.define([
 
       switch(inputType) {
         case "Date":
-          isValid = !isNaN(Date.parse(inputValue))
+          isValid = !isNaN(Date.parse(inputValue));
           break;
         case "String":
-          isValid = !!(`${inputValue}`.length)
+          isValid = !!(`${inputValue}`.length);
+          break;
         case "Integer":
           isValid = Number(inputValue) && inputValue > 0;
           break;
       }
 
       this.oConfigModel.setProperty(`/newProductData/is${sPropertyName}Valid`, isValid);
+    },
+
+    async onOpenProductEditV2Dialog(oEvent) {
+      const oProductData = oEvent.getSource().getBindingContext("oDataV2").getObject();
+      this.oConfigModel.setProperty("/newProductData", {
+        ...oProductData,
+        isNameValid: true,
+        isDescriptionValid: true,
+        isRatingValid: true,
+        isPriceValid: true,
+        isReleaseDateValid: true,
+        isDiscontinuedDateValid: true,
+        isEditable: true,
+      });
+
+      try {
+        if (!this.oProductEditDialog) {
+          this.oProductEditDialog ??= await this.loadFragment({
+            name: "project1.view.fragments.ProductCreationV2Dialog",
+            id: 'productUpdateV2Dialog',
+          });
+
+          this.oProductEditDialog.bindElement({
+            path: "/newProductData",
+            model: "oConfigModel"
+          });
+        }
+
+        this.oProductEditDialog.open();
+      } catch {
+        Log.error("Cannot load product creation dialog");
+      }
+    },
+
+    onCancelV2ProductUpdate() {
+      this.oProductEditDialog.close();
+    },
+
+    onSubmitV2ProductUpdate() {
+      const { ID, Name, Description, Rating, Price, ReleaseDate, DiscontinuedDate } = this.oConfigModel.getProperty("/newProductData");
+
+      const oModel = this.getView().getModel("oDataV2");
+      const oBundle = this.getView().getModel("i18n").getResourceBundle();
+      const sSuccessMsg = oBundle.getText("editSuccessMessage");
+      const sErrorMsg = oBundle.getText("editErrorMessage");
+
+      oModel.update(`/Products(${ID})`, { Name, Description, Rating, Price, ReleaseDate, DiscontinuedDate }, {
+        success: () => {
+          MessageToast.show(sSuccessMsg),
+          this.oProductEditDialog.close();
+        },
+        error: () => MessageBox.error(sErrorMsg),
+      });
     }
   });
 });
