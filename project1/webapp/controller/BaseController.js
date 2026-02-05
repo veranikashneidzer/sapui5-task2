@@ -7,5 +7,9 @@ sap.ui.define([
         getBooksModel() {
             return this.getView().getModel("booksModel");
         },
+
+        getConfigModel() {
+            return this.getView().getModel("oConfigModel");
+        },
     });
 });

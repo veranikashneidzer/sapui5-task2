@@ -5,10 +5,22 @@
         id="booksListV2"
         width="auto"
         mode="MultiSelect"
-        selectionChange=".onBooksTableSelectedItemsChanged"
+        selectionChange=".onBooksTableV2SelectedItemsChanged"
         items="{
             path: 'oDataV2>/Products'
         }">
+        <headerToolbar>
+            <OverflowToolbar id="otbSubheader">
+                <Title text="Products" level="H2" />
+                <ToolbarSpacer />
+                <Button
+                    text="{i18n>buttonDelete}"
+                    class="sapUiTinyMarginEnd"
+                    enabled="{= Boolean(${oDataV2BooksModel>/booksSelectedItems}.length)}"
+                    press=".onDeleteV2Books">
+                </Button>
+            </OverflowToolbar>
+        </headerToolbar>
         <columns>
             <Column>
                 <Text text="{i18n>columnName}" />
