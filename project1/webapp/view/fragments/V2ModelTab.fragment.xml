@@ -13,6 +13,12 @@
             <OverflowToolbar id="otbSubheader">
                 <Title text="Products" level="H2" />
                 <ToolbarSpacer />
+                <Input
+                    width="25%"
+                    valueLiveUpdate="true"
+                    class="sapUiTinyMarginEnd"
+                    placeholder="{i18n>searchInputPlaceholder}"
+                    liveChange=".onSearchV2Products"/>
                 <Button
                     text="{i18n>buttonDelete}"
                     class="sapUiTinyMarginEnd"
