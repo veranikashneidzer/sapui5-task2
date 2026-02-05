@@ -50,11 +50,16 @@
                 <Text text="{i18n>columnRating}" />
             </Column>
             <Column
+                minScreenWidth="Small"
+                demandPopin="true">
+                <Text text="{i18n>columnPrice}" />
+            </Column>
+            <Column
                 hAlign="End"
                 width="10em"
                 minScreenWidth="Small"
                 demandPopin="true">
-                <Text text="{i18n>columnPrice}" />
+                <Text text="{i18n>columnActions}" />
             </Column>
         </columns>
         <items>
@@ -77,7 +82,12 @@
                     <Text
                         text="{DataV2>Rating}"/>
                     <Text
-                        text="{DataV2>Price}"/>
+                        text="{oDataV2>Price}"/>
+                    <FlexBox justifyContent="End">
+                        <Button 
+                            text="{i18n>buttonEdit}"
+                            press=".onOpenProductEditV2Dialog"/>
+                    </FlexBox>
                 </cells>
             </ColumnListItem>
         </items>

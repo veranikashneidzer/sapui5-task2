@@ -61,7 +61,8 @@ sap.ui.define([
       try {
         if (!this.oProductCreationDialog) {
           this.oProductCreationV2Dialog ??= await this.loadFragment({
-            name: "project1.view.fragments.ProductCreationV2Dialog"
+            name: "project1.view.fragments.ProductCreationV2Dialog",
+            id: 'productCreationV2Dialog',
           });
         }
 
@@ -130,6 +131,59 @@ sap.ui.define([
       oControl.setValueState(isValid ? "None" : "Error");
 
       return isValid;
+    },
+
+    async onOpenProductEditV2Dialog(oEvent) {
+      const oProductData = oEvent.getSource().getBindingContext("oDataV2").getObject();
+      this.oConfigModel.setProperty("/newProductData", {
+        ...oProductData,
+        isNameValid: true,
+        isDescriptionValid: true,
+        isRatingValid: true,
+        isPriceValid: true,
+        isReleaseDateValid: true,
+        isDiscontinuedDateValid: true,
+        isEditable: true,
+      });
+
+      try {
+        if (!this.oProductEditDialog) {
+          this.oProductEditDialog ??= await this.loadFragment({
+            name: "project1.view.fragments.ProductCreationV2Dialog",
+            id: 'productUpdateV2Dialog',
+          });
+
+          this.oProductEditDialog.bindElement({
+            path: "/newProductData",
+            model: "oConfigModel"
+          });
+        }
+
+        this.oProductEditDialog.open();
+      } catch {
+        Log.error("Cannot load product creation dialog");
+      }
+    },
+
+    onCancelV2ProductUpdate() {
+      this.oProductEditDialog.close();
+    },
+
+    onSubmitV2ProductUpdate() {
+      const { ID, Name, Description, Rating, Price, ReleaseDate, DiscontinuedDate } = this.oConfigModel.getProperty("/newProductData");
+
+      const oModel = this.getView().getModel("oDataV2");
+      const oBundle = this.getView().getModel("i18n").getResourceBundle();
+      const sSuccessMsg = oBundle.getText("editSuccessMessage");
+      const sErrorMsg = oBundle.getText("editErrorMessage");
+
+      oModel.update(`/Products(${ID})`, { Name, Description, Rating, Price, ReleaseDate, DiscontinuedDate }, {
+        success: () => {
+          MessageToast.show(sSuccessMsg),
+          this.oProductEditDialog.close();
+        },
+        error: () => MessageBox.error(sErrorMsg),
+      });
     }
   });
 });
