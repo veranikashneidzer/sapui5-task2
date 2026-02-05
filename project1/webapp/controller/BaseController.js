@@ -8,8 +8,8 @@ sap.ui.define([
             return this.getView().getModel("booksModel");
         },
 
-        getODataV2BooksModel() {
-            return this.getView().getModel("oDataV2BooksModel");
+        getConfigModel() {
+            return this.getView().getModel("oConfigModel");
         },
     });
 });

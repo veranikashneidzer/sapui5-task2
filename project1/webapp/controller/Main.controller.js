@@ -75,13 +75,14 @@ sap.ui.define([
 
       this.oModel = this.getBooksModel();
 
-      this.oDataV2BooksModel = new JSONModel({
+      this.oConfigModel = new JSONModel({
         booksSelectedItems: [],
+        newBookData: {},
       });
 
-      this.getView().setModel(this.oDataV2BooksModel, "oDataV2BooksModel");
+      this.getView().setModel(this.oConfigModel, "oConfigModel");
 
-      this.oDataV2BooksModel = this.getODataV2BooksModel();
+      this.oConfigModel = this.getConfigModel();
     },
   }))
 });

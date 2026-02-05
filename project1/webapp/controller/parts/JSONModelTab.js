@@ -122,7 +122,7 @@ sap.ui.define([
       try {
         if (!this.oBookCreationDialog) {
           this.oBookCreationDialog ??= await this.loadFragment({
-            name: "project1.view.BookCreationDialog"
+            name: "project1.view.fragments.BookCreationDialog"
           });
 
           this.oBookCreationDialog.bindElement({

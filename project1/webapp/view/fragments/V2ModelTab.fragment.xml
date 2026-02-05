@@ -15,8 +15,9 @@
                 <ToolbarSpacer />
                 <Button
                     text="{i18n>buttonDelete}"
+                    class="sapUiTinyMarginEnd"
                     enabled="{= Boolean(${oDataV2BooksModel>/booksSelectedItems}.length)}"
-                    press=".onDeleteODataV2Books">
+                    press=".onDeleteV2Books">
                 </Button>
             </OverflowToolbar>
         </headerToolbar>
