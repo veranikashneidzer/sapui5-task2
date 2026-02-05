@@ -76,8 +76,15 @@ sap.ui.define([
       this.oModel = this.getBooksModel();
 
       this.oConfigModel = new JSONModel({
-        booksSelectedItems: [],
-        newBookData: {},
+        productsSelectedItems: [],
+        newProductData: {
+          isNameValid: false,
+          isDescriptionValid: false,
+          isRatingValid: false,
+          isPriceValid: false,
+          isReleaseDateValid: false,
+          isDiscontinuedDateValid: false,
+        },
       });
 
       this.getView().setModel(this.oConfigModel, "oConfigModel");

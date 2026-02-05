@@ -2,10 +2,10 @@
     xmlns="sap.m"
     xmlns:core="sap.ui.core">
     <Table
-        id="booksListV2"
+        id="productsListV2"
         width="auto"
         mode="MultiSelect"
-        selectionChange=".onBooksTableV2SelectedItemsChanged"
+        selectionChange=".onProductsTableV2SelectedItemsChanged"
         items="{
             path: 'oDataV2>/Products'
         }">
@@ -16,8 +16,12 @@
                 <Button
                     text="{i18n>buttonDelete}"
                     class="sapUiTinyMarginEnd"
-                    enabled="{= Boolean(${oDataV2BooksModel>/booksSelectedItems}.length)}"
-                    press=".onDeleteV2Books">
+                    enabled="{= Boolean(${oConfigModel>/productsSelectedItems}.length)}"
+                    press=".onDeleteV2Products">
+                </Button>
+                <Button
+                    text="{i18n>buttonAdd}"
+                    press=".onOpenProductCreationV2Dialog">
                 </Button>
             </OverflowToolbar>
         </headerToolbar>

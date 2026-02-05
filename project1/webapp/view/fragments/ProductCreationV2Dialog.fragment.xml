@@ -1,0 +1,101 @@
+<core:FragmentDefinition
+   xmlns="sap.m"
+   xmlns:core="sap.ui.core" >
+   <Dialog
+        id="ProductCreationV2Dialog"
+        title ="{i18n>productCreationDialogHeaderText}"
+        class="sapUiResponsivePadding--content sapUiResponsivePadding--header sapUiResponsivePadding--footer sapUiResponsivePadding--subHeader">
+        <content>
+            <Input
+                id="productCreationDialogNameInput"
+                value="{
+                    path: 'oConfigModel>Name',
+                    type: 'sap.ui.model.type.String',
+                    constraints: { minimum: 1 }
+                }"
+                required="true" 
+                placeholder="{i18n>productCreationDialogNamePlaceholder}"
+                valueState="{= !!${oConfigModel>isNameValid} ? 'None' : 'Error'}"
+                valueStateText="{i18n>productCreationDialogValidationError}"
+                liveChange=".validateData"
+                />
+            <Input
+                id="productCreationDialogDescriptionInput"
+                value="{
+                    path: 'oConfigModel>Description',
+                    type: 'sap.ui.model.type.String',
+                    constraints: { minimum: 1 }
+                }"
+                required="true" 
+                placeholder="{i18n>productCreationDialogDescriptionPlaceholder}"
+                valueState="{= !!${oConfigModel>isDescriptionValid} ? 'None' : 'Error'}"
+                valueStateText="{i18n>productCreationDialogValidationError}"
+                liveChange=".validateData"
+                />
+            <Input
+                id="productCreationDialogRatingInput"
+                type="Number"
+                value="{
+                    path: 'oConfigModel>Rating',
+                    type: 'sap.ui.model.type.Integer'
+                }"
+                required="true" 
+                placeholder="{i18n>productCreationDialogRatingPlaceholder}"
+                valueState="{= !!${oConfigModel>isRatingValid} ? 'None' : 'Error'}"
+                valueStateText="{i18n>productCreationDialogValidationError}"
+                liveChange=".validateData"
+                />
+            <Input
+                id="productCreationDialogPriceInput"
+                type="Number"
+                value="{
+                    path: 'oConfigModel>Price',
+                    type: 'sap.ui.model.type.Integer'
+                }"
+                required="true" 
+                placeholder="{i18n>productCreationDialogPricePlaceholder}"
+                valueState="{= !!${oConfigModel>isPriceValid} ? 'None' : 'Error'}"
+                valueStateText="{i18n>productCreationDialogValidationError}"
+                liveChange=".validateData"
+                />
+            <DatePicker
+                id="productCreationDialogReleaseDateInput"
+                placeholder="{i18n>productCreationDialogReleaseDatePlaceholder}" 
+                displayFormat="dd-MM-yyyy" 
+                valueFormat="yyyy-MM-dd" 
+                value="{
+                    path: 'oConfigModel>ReleaseDate',
+                    type: 'sap.ui.model.type.Date'
+                }"
+                required="true" 
+                valueState="{= !!${oConfigModel>isReleaseDateValid} ? 'None' : 'Error'}"
+                valueStateText="{i18n>productCreationDialogValidationError}"
+                change=".validateData"
+                />
+            <DatePicker
+                id="productCreationDialogDiscontinuedDateInput"
+                placeholder="{i18n>productCreationDialogDiscontinuedDatePlaceholder}" 
+                displayFormat="dd-MM-yyyy" 
+                valueFormat="yyyy-MM-dd" 
+                value="{
+                    path: 'oConfigModel>DiscontinuedDate',
+                    type: 'sap.ui.model.type.Date'
+                }"
+                required="true" 
+                valueState="{= !!${oConfigModel>isDiscontinuedDateValid} ? 'None' : 'Error'}"
+                valueStateText="{i18n>productCreationDialogValidationError}"
+                change=".validateData"
+                />
+        </content>
+        <beginButton>
+            <Button
+                text="{i18n>dialogAddButtonText}"
+                press=".onSubmitV2ProductCreation"/>
+        </beginButton>
+        <endButton>
+            <Button
+                text="{i18n>dialogCancelButtonText}"
+                press=".onCancelV2ProductCreation"/>
+        </endButton>
+   </Dialog>
+</core:FragmentDefinition>
