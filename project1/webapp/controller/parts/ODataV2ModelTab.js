@@ -10,6 +10,19 @@ sap.ui.define([
       this.configModel.setProperty("/productsSelectedItems", oEvent.getSource().getSelectedItems());
     },
 
+    onOpenProductsDeleteConfirmationDialog(oEvent) {
+      const oBundle = this.getView().getModel("i18n").getResourceBundle();
+
+      MessageBox.confirm(oBundle.getText("productsDeleteConfirmationDialogText"), {
+        actions: [MessageBox.Action.YES, MessageBox.Action.CLOSE],
+        onClose: (sAction) => {
+          if (sAction === MessageBox.Action.YES) {
+            this.onDeleteV2Products();
+          }
+        },
+      });
+    },
+
     onDeleteV2Products() {
       const oList = this.byId("productsListV2");
       const selectedIDs = oList?.getSelectedContexts().map(record => record.getObject()?.["ID"]);
@@ -34,6 +47,9 @@ sap.ui.define([
     },
 
     async onOpenProductCreationV2Dialog() {
+      const oList = this.byId("productsListV2");
+      oList.removeSelections();
+      
       try {
         if (!this.oProductCreationDialog) {
           this.oProductCreationV2Dialog ??= await this.loadFragment({

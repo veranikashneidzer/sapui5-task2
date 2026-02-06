@@ -17,7 +17,7 @@
                     text="{i18n>buttonDelete}"
                     class="sapUiTinyMarginEnd"
                     enabled="{= Boolean(${configModel>/productsSelectedItems}.length)}"
-                    press=".onDeleteV2Products">
+                    press=".onOpenProductsDeleteConfirmationDialog">
                 </Button>
                 <Button
                     text="{i18n>buttonAdd}"
