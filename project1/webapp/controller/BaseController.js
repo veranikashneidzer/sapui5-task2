@@ -9,7 +9,7 @@ sap.ui.define([
         },
 
         getConfigModel() {
-            return this.getView().getModel("oConfigModel");
+            return this.getView().getModel("configModel");
         },
     });
 });

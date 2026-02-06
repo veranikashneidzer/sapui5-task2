@@ -75,8 +75,9 @@ sap.ui.define([
 
       this.oModel = this.getBooksModel();
 
-      this.oConfigModel = new JSONModel({
+      this.configModel = new JSONModel({
         productsSelectedItems: [],
+        isNewProductValid: false,
         newProductData: {
           isNameValid: false,
           isDescriptionValid: false,
@@ -87,9 +88,13 @@ sap.ui.define([
         },
       });
 
-      this.getView().setModel(this.oConfigModel, "oConfigModel");
+      this.getView().setModel(this.configModel, "configModel");
 
-      this.oConfigModel = this.getConfigModel();
+      this.configModel = this.getConfigModel();
+
+      this.dataV2Model = this.getOwnerComponent().getModel("DataV2");
+
+      this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
     },
   }))
 });

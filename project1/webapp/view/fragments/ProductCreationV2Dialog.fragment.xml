@@ -6,89 +6,89 @@
         title ="{i18n>productCreationDialogHeaderText}"
         class="sapUiResponsivePadding--content sapUiResponsivePadding--header sapUiResponsivePadding--footer sapUiResponsivePadding--subHeader">
         <content>
-            <Input
-                id="productCreationDialogNameInput"
-                value="{
-                    path: 'oConfigModel>Name',
-                    type: 'sap.ui.model.type.String',
-                    constraints: { minimum: 1 }
-                }"
-                required="true" 
-                placeholder="{i18n>productCreationDialogNamePlaceholder}"
-                valueState="{= !!${oConfigModel>isNameValid} ? 'None' : 'Error'}"
-                valueStateText="{i18n>productCreationDialogValidationError}"
-                liveChange=".validateData"
-                />
-            <Input
-                id="productCreationDialogDescriptionInput"
-                value="{
-                    path: 'oConfigModel>Description',
-                    type: 'sap.ui.model.type.String',
-                    constraints: { minimum: 1 }
-                }"
-                required="true" 
-                placeholder="{i18n>productCreationDialogDescriptionPlaceholder}"
-                valueState="{= !!${oConfigModel>isDescriptionValid} ? 'None' : 'Error'}"
-                valueStateText="{i18n>productCreationDialogValidationError}"
-                liveChange=".validateData"
-                />
-            <Input
-                id="productCreationDialogRatingInput"
-                type="Number"
-                value="{
-                    path: 'oConfigModel>Rating',
-                    type: 'sap.ui.model.type.Integer'
-                }"
-                required="true" 
-                placeholder="{i18n>productCreationDialogRatingPlaceholder}"
-                valueState="{= !!${oConfigModel>isRatingValid} ? 'None' : 'Error'}"
-                valueStateText="{i18n>productCreationDialogValidationError}"
-                liveChange=".validateData"
-                />
-            <Input
-                id="productCreationDialogPriceInput"
-                type="Number"
-                value="{
-                    path: 'oConfigModel>Price',
-                    type: 'sap.ui.model.type.Integer'
-                }"
-                required="true" 
-                placeholder="{i18n>productCreationDialogPricePlaceholder}"
-                valueState="{= !!${oConfigModel>isPriceValid} ? 'None' : 'Error'}"
-                valueStateText="{i18n>productCreationDialogValidationError}"
-                liveChange=".validateData"
-                />
-            <DatePicker
-                id="productCreationDialogReleaseDateInput"
-                placeholder="{i18n>productCreationDialogReleaseDatePlaceholder}" 
-                displayFormat="dd-MM-yyyy" 
-                valueFormat="yyyy-MM-dd" 
-                value="{
-                    path: 'oConfigModel>ReleaseDate',
-                    type: 'sap.ui.model.type.Date'
-                }"
-                required="true" 
-                valueState="{= !!${oConfigModel>isReleaseDateValid} ? 'None' : 'Error'}"
-                valueStateText="{i18n>productCreationDialogValidationError}"
-                change=".validateData"
-                />
-            <DatePicker
-                id="productCreationDialogDiscontinuedDateInput"
-                placeholder="{i18n>productCreationDialogDiscontinuedDatePlaceholder}" 
-                displayFormat="dd-MM-yyyy" 
-                valueFormat="yyyy-MM-dd" 
-                value="{
-                    path: 'oConfigModel>DiscontinuedDate',
-                    type: 'sap.ui.model.type.Date'
-                }"
-                required="true" 
-                valueState="{= !!${oConfigModel>isDiscontinuedDateValid} ? 'None' : 'Error'}"
-                valueStateText="{i18n>productCreationDialogValidationError}"
-                change=".validateData"
-                />
+            <FlexBox direction="Column">
+                <Input
+                    id="productCreationDialogNameInput"
+                    value="{
+                        path: 'DataV2>Name',
+                        type: 'sap.ui.model.type.String',
+                        constraints: { minLength: 1 }
+                    }"
+                    required="true" 
+                    placeholder="{i18n>productCreationDialogNamePlaceholder}"
+                    valueStateText="{i18n>productCreationDialogValidationError}"
+                    change=".validateControls"
+                    />
+                <Input
+                    id="productCreationDialogDescriptionInput"
+                    value="{
+                        path: 'DataV2>Description',
+                        type: 'sap.ui.model.type.String',
+                        constraints: { minLength: 1 }
+                    }"
+                    required="true" 
+                    placeholder="{i18n>productCreationDialogDescriptionPlaceholder}"
+                    valueStateText="{i18n>productCreationDialogValidationError}"
+                    change=".validateControls"
+                    />
+                <Input
+                    id="productCreationDialogRatingInput"
+                    type="Number"
+                    value="{
+                        path: 'DataV2>Rating',
+                        type: 'sap.ui.model.type.Integer',
+                        constraints: { maximum: 5 }
+                    }"
+                    required="true" 
+                    placeholder="{i18n>productCreationDialogRatingPlaceholder}"
+                    valueStateText="{i18n>productCreationDialogValidationError}"
+                    change=".validateControls"
+                    />
+                <Input
+                    id="productCreationDialogPriceInput"
+                    type="Number"
+                    value="{
+                        path: 'DataV2>Price',
+                        type: 'sap.ui.model.type.Integer',
+                        constraints: { minimum: 0.1 }
+                    }"
+                    required="true" 
+                    placeholder="{i18n>productCreationDialogPricePlaceholder}"
+                    valueStateText="{i18n>productCreationDialogValidationError}"
+                    change=".validateControls"
+                    />
+                <DatePicker
+                    id="productCreationDialogReleaseDateInput"
+                    placeholder="{i18n>productCreationDialogReleaseDatePlaceholder}" 
+                    displayFormat="dd-MM-yyyy"
+                    valueFormat="yyyy-MM-dd" 
+                    value="{
+                        path: 'DataV2>ReleaseDate',
+                        type: 'sap.ui.model.type.Date'
+                    }"
+                    required="true" 
+                    valueStateText="{i18n>productCreationDialogValidationError}"
+                    change=".validateControls"
+                    
+                    />
+                <DatePicker
+                    id="productCreationDialogDiscontinuedDateInput"
+                    placeholder="{i18n>productCreationDialogDiscontinuedDatePlaceholder}" 
+                    displayFormat="dd-MM-yyyy" 
+                    valueFormat="yyyy-MM-dd" 
+                    value="{
+                        path: 'DataV2>DiscontinuedDate',
+                        type: 'sap.ui.model.type.Date'
+                    }"
+                    required="true" 
+                    valueStateText="{i18n>productCreationDialogValidationError}"
+                    change=".validateControls"
+                    />
+            </FlexBox>
         </content>
         <beginButton>
             <Button
+                enabled="{DataV2>isNewProductValid}"
                 text="{i18n>dialogAddButtonText}"
                 press=".onSubmitV2ProductCreation"/>
         </beginButton>

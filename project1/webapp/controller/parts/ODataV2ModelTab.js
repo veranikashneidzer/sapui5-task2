@@ -7,26 +7,24 @@ sap.ui.define([
 
   return ({
     onProductsTableV2SelectedItemsChanged(oEvent) {
-      this.oConfigModel.setProperty("/productsSelectedItems", oEvent.getSource().getSelectedItems());
+      this.configModel.setProperty("/productsSelectedItems", oEvent.getSource().getSelectedItems());
     },
 
     onDeleteV2Products() {
-      const oModel = this.getView().getModel("oDataV2");
       const oList = this.byId("productsListV2");
-      const oBundle = this.getView().getModel("i18n").getResourceBundle();
       const selectedIDs = oList?.getSelectedContexts().map(record => record.getObject()?.["ID"]);
-      oModel.setDeferredGroups(["deleteGroup"]);
+      this.dataV2Model.setDeferredGroups(["deleteGroup"]);
 
       oList?.getSelectedContexts()?.forEach((oContext, index) => {
-        oModel.remove(oContext.getPath(), {
+        this.dataV2Model.remove(oContext.getPath(), {
           groupId: "deleteGroup"
         });
       });
 
-      const sSuccessMsg = oBundle.getText(selectedIDs.length > 1 ? "deletionSuccessMessagePlural" : "deletionSuccessMessage");
-      const sErrorMsg = oBundle.getText("deletionErrorMessage");
+      const sSuccessMsg = this.oBundle.getText(selectedIDs.length > 1 ? "deletionSuccessMessagePlural" : "deletionSuccessMessage");
+      const sErrorMsg = this.oBundle.getText("deletionErrorMessage");
 
-      oModel.submitChanges({
+      this.dataV2Model.submitChanges({
         groupId: "deleteGroup",
         success: () => MessageToast.show(sSuccessMsg),
         error: () => MessageBox.error(sErrorMsg),
@@ -36,19 +34,15 @@ sap.ui.define([
     },
 
     async onOpenProductCreationV2Dialog() {
-      this.oConfigModel.setProperty("/newProductData", {});
-
       try {
         if (!this.oProductCreationDialog) {
           this.oProductCreationV2Dialog ??= await this.loadFragment({
             name: "project1.view.fragments.ProductCreationV2Dialog"
           });
-
-          this.oProductCreationV2Dialog.bindElement({
-            path: "/newProductData",
-            model: "oConfigModel"
-          });
         }
+
+        const oNewContext = this.dataV2Model.createEntry("/Products", { properties: { isNewProductValid: false } });
+        this.oProductCreationV2Dialog.setBindingContext(oNewContext, "DataV2");
 
         this.oProductCreationV2Dialog.open();
       } catch {
@@ -56,15 +50,11 @@ sap.ui.define([
       }
     },
 
-    onSubmitV2ProductCreation() {
-      const { Name, Description, Rating, Price, ReleaseDate, DiscontinuedDate } = this.oConfigModel.getProperty("/newProductData");
+    onSubmitV2ProductCreation() {      
+      const sSuccessMsg = this.oBundle.getText("creationSuccessMessage");
+      const sErrorMsg = this.oBundle.getText("creationErrorMessage");
 
-      const oModel = this.getView().getModel("oDataV2");
-      const oBundle = this.getView().getModel("i18n").getResourceBundle();
-      const sSuccessMsg = oBundle.getText("creationSuccessMessage");
-      const sErrorMsg = oBundle.getText("creationErrorMessage");
-
-      oModel.create("/Products", { Name, Description, Rating, Price, ReleaseDate, DiscontinuedDate }, {
+      this.dataV2Model.submitChanges({
         success: () => {
           MessageToast.show(sSuccessMsg),
           this.oProductCreationV2Dialog.close();
@@ -74,29 +64,36 @@ sap.ui.define([
     },
 
     onCancelV2ProductCreation() {
+      this.dataV2Model.resetChanges();
       this.oProductCreationV2Dialog.close();
     },
 
-    validateData(oEvent) {
-      const inputId = oEvent.getParameter("id").split('--').pop();
-      const inputType = oEvent.getSource().getBindingInfo("value").type.getName();
-      const inputValue = oEvent.getSource().getValue();
+    validateControls() {
+      const aControls = this.oProductCreationV2Dialog.getContent()[0].getItems();
+      let isAllControlsValid = true;
 
-      const sPropertyName = inputId.replace("productCreationDialog", '').replace("Input", '');
-      let isValid = false;
+      aControls.forEach((oControl) => {
+        let isValid = false;
 
-      switch(inputType) {
-        case "Date":
-          isValid = !isNaN(Date.parse(inputValue))
-          break;
-        case "String":
-          isValid = !!(`${inputValue}`.length)
-        case "Integer":
-          isValid = Number(inputValue) && inputValue > 0;
-          break;
+        if (oControl.isA("sap.m.Input")) {
+          const inputValue = oControl.getValue();
+          isValid = oControl.getType() === "Number" ? Number(inputValue) && inputValue > 0 : !!(`${inputValue}`.length);
+        } else if (oControl.isA("sap.m.DatePicker")) {
+          isValid = oControl.isValidValue() && !!oControl.getValue().length;
+        }
+
+        if (!isValid) {
+          isAllControlsValid = false;
+        }
+
+        oControl.setValueState(isValid ? "None" : "Error");
+      });
+
+      if (isAllControlsValid) {
+        const sPath = this.oProductCreationV2Dialog.getBindingContext("DataV2").getPath();
+        this.dataV2Model.setProperty(`${sPath}/isNewProductValid`, true);
+        debugger;
       }
-
-      this.oConfigModel.setProperty(`/newProductData/is${sPropertyName}Valid`, isValid);
     }
   });
 });
