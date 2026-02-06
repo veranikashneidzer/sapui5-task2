@@ -17,7 +17,7 @@
                     required="true" 
                     placeholder="{i18n>productCreationDialogNamePlaceholder}"
                     valueStateText="{i18n>productCreationDialogValidationError}"
-                    change=".validateControls"
+                    liveChange=".onCreationDialogControlChange"
                     />
                 <Input
                     id="productCreationDialogDescriptionInput"
@@ -29,7 +29,7 @@
                     required="true" 
                     placeholder="{i18n>productCreationDialogDescriptionPlaceholder}"
                     valueStateText="{i18n>productCreationDialogValidationError}"
-                    change=".validateControls"
+                    liveChange=".onCreationDialogControlChange"
                     />
                 <Input
                     id="productCreationDialogRatingInput"
@@ -42,7 +42,7 @@
                     required="true" 
                     placeholder="{i18n>productCreationDialogRatingPlaceholder}"
                     valueStateText="{i18n>productCreationDialogValidationError}"
-                    change=".validateControls"
+                    liveChange=".onCreationDialogControlChange"
                     />
                 <Input
                     id="productCreationDialogPriceInput"
@@ -55,7 +55,7 @@
                     required="true" 
                     placeholder="{i18n>productCreationDialogPricePlaceholder}"
                     valueStateText="{i18n>productCreationDialogValidationError}"
-                    change=".validateControls"
+                    liveChange=".onCreationDialogControlChange"
                     />
                 <DatePicker
                     id="productCreationDialogReleaseDateInput"
@@ -68,8 +68,7 @@
                     }"
                     required="true" 
                     valueStateText="{i18n>productCreationDialogValidationError}"
-                    change=".validateControls"
-                    
+                    change=".onCreationDialogControlChange"
                     />
                 <DatePicker
                     id="productCreationDialogDiscontinuedDateInput"
@@ -82,13 +81,12 @@
                     }"
                     required="true" 
                     valueStateText="{i18n>productCreationDialogValidationError}"
-                    change=".validateControls"
+                    change=".onCreationDialogControlChange"
                     />
             </FlexBox>
         </content>
         <beginButton>
             <Button
-                enabled="{DataV2>isNewProductValid}"
                 text="{i18n>dialogAddButtonText}"
                 press=".onSubmitV2ProductCreation"/>
         </beginButton>
