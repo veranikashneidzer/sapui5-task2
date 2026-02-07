@@ -13,28 +13,29 @@
             <Toolbar>
                 <Button 
                     text="{i18n>buttonAddRecord}"
+                    class="sapUiTinyMarginEnd"
                     press=".onOpenBookCreationDialog">
                 </Button>
-                <ToolbarSpacer/>
                 <Button
                     text="{i18n>buttonDeleteRecord}"
+                    class="sapUiTinyMarginEnd"
                     enabled="{= Boolean(${booksModel>/booksSelectedItems}.length)}"
                     press=".onOpenDeletionRecordConfirmationDialog">
                 </Button>
                 <Input
                     width="50%"
                     valueLiveUpdate="true"
+                    class="sapUiTinyMarginEnd"
                     liveChange=".onSetSearchedName"/>
-                <ToolbarSpacer/>
                 <ComboBox
                     selectedKey="0"
                     selectionChange=".onSetSelectedGenre"
+                    class="sapUiTinyMarginEnd"
                     items="{
                         path: 'booksModel>/genres'
                     }">
                     <core:Item key="{booksModel>key}" text="{booksModel>title}" />
                 </ComboBox>
-                <ToolbarSpacer/>
                 <Button text="{i18n>buttonFilter}" press="onFilterTable" />
             </Toolbar>
         </headerToolbar>

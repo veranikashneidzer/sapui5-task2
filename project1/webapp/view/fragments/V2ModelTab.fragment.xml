@@ -2,12 +2,12 @@
     xmlns="sap.m"
     xmlns:core="sap.ui.core">
     <Table
-        id="booksListV2"
+        id="productsListV2"
         width="auto"
         mode="MultiSelect"
-        selectionChange=".onBooksTableV2SelectedItemsChanged"
+        selectionChange=".onProductsTableV2SelectedItemsChanged"
         items="{
-            path: 'oDataV2>/Products'
+            path: 'DataV2>/Products'
         }">
         <headerToolbar>
             <OverflowToolbar id="otbSubheader">
@@ -16,8 +16,12 @@
                 <Button
                     text="{i18n>buttonDelete}"
                     class="sapUiTinyMarginEnd"
-                    enabled="{= Boolean(${oDataV2BooksModel>/booksSelectedItems}.length)}"
-                    press=".onDeleteV2Books">
+                    enabled="{= Boolean(${configModel>/productsSelectedItems}.length)}"
+                    press=".onOpenProductsDeleteConfirmationDialog">
+                </Button>
+                <Button
+                    text="{i18n>buttonAdd}"
+                    press=".onOpenProductCreationV2Dialog">
                 </Button>
             </OverflowToolbar>
         </headerToolbar>
@@ -57,23 +61,23 @@
             <ColumnListItem>
                 <cells>
                     <ObjectIdentifier 
-                        title="{oDataV2>Name}" />
+                        title="{DataV2>Name}" />
                     <Text
-                        text="{oDataV2>Description}" />
+                        text="{DataV2>Description}" />
                     <Text
                         text="{
-                            path: 'oDataV2>ReleaseDate',
+                            path: 'DataV2>ReleaseDate',
                             type: 'sap.ui.model.odata.type.DateTime'
                         }" />
                     <Text
                         text="{
-                            path: 'oDataV2>DiscontinuedDate',
+                            path: 'DataV2>DiscontinuedDate',
                             type: 'sap.ui.model.odata.type.DateTime'
                         }"/>
                     <Text
-                        text="{oDataV2>Rating}"/>
+                        text="{DataV2>Rating}"/>
                     <Text
-                        text="{oDataV2>Price}"/>
+                        text="{DataV2>Price}"/>
                 </cells>
             </ColumnListItem>
         </items>

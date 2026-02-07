@@ -9,24 +9,29 @@
             <Input
                 value="{booksModel>name}"
                 placeholder="{i18n>bookCreationDialogNamePlaceholder}"
+                required="true"
                 />
             <Input
                 value="{booksModel>author}"
                 placeholder="{i18n>bookCreationDialogAuthorPlaceholder}"
+                required="true"
                 />
             <Input
                 value="{booksModel>genre}"
                 placeholder="{i18n>bookCreationDialogGenrePlaceholder}"
+                required="true"
                 />
             <Input
                 type="Date"
                 value="{booksModel>releaseDate}"
                 placeholder="{i18n>bookCreationDialogReleaseDatePlaceholder}"
+                required="true"
                 />
             <Input
                 type="Number"
                 value="{booksModel>availableQuantity}"
                 placeholder="{i18n>bookCreationDialogAvailableQuantityPlaceholder}"
+                required="true"
                 />
         </content>
         <beginButton>

@@ -51,6 +51,7 @@
     }
   },
   "sap.ui5": {
+    "handleValidation": true,
     "dependencies": {
       "minUI5Version": "1.144.0",
       "libs": {
@@ -73,9 +74,12 @@
           "fallbackLocale": ""
         }
       },
-      "oDataV2": {
+      "DataV2": {
         "type": "sap.ui.model.odata.v2.ODataModel",
-        "dataSource": "ODataV2"
+        "dataSource": "ODataV2",
+        "settings": {
+          "defaultBindingMode": "TwoWay"
+        }
       },
       "oDataV4": {
         "type": "sap.ui.model.odata.v4.ODataModel",
