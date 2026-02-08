@@ -3,8 +3,9 @@ sap.ui.define([
   "sap/m/MessageBox",
   "sap/base/Log",
   "sap/ui/model/Filter",
-  "sap/ui/model/FilterOperator"
-], (MessageToast, MessageBox, Log, Filter, FilterOperator) => {
+  "sap/ui/model/FilterOperator",
+  "sap/ui/model/Sorter"
+], (MessageToast, MessageBox, Log, Filter, FilterOperator, Sorter) => {
   "use strict";
 
   return ({
@@ -193,6 +194,14 @@ sap.ui.define([
 			const oList = this.byId("productsListV2");
 			const oBinding = oList.getBinding("items");
 			oBinding.filter(aFilter);
+    },
+
+    onSortV2Products(oEvent) {
+        const oList = this.byId("productsListV2");
+			  const oBinding = oList.getBinding("items");
+        const sSelectedKey = oEvent.getSource().getSelectedKey();
+        const oSorter = new Sorter(sSelectedKey, true);
+        oBinding.sort(oSorter);
     }
   });
 });
