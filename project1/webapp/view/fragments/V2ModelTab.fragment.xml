@@ -13,6 +13,17 @@
             <OverflowToolbar id="otbSubheader">
                 <Title text="Products" level="H2" />
                 <ToolbarSpacer />
+                <ComboBox
+                    placeholder="{i18n>comboBoxPlaceholder}"
+                    selectionChange=".onSortV2Products">
+                    <items>
+                        <core:Item key="Name" text="{i18n>columnName}" />
+                        <core:Item key="Description" text="{i18n>columnDescription}" />
+                        <core:Item key="ReleaseDate" text="{i18n>columnReleaseDate}" />
+                        <core:Item key="Rating" text="{i18n>columnRating}" />
+                        <core:Item key="Price" text="{i18n>columnPrice}" />
+                    </items>
+                </ComboBox>
                 <Input
                     width="25%"
                     valueLiveUpdate="true"
@@ -88,7 +99,7 @@
                     <Text
                         text="{DataV2>Rating}"/>
                     <Text
-                        text="{oDataV2>Price}"/>
+                        text="{DataV2>Price}"/>
                     <FlexBox justifyContent="End">
                         <Button 
                             text="{i18n>buttonEdit}"
