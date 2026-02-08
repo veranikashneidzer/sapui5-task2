@@ -68,6 +68,7 @@ sap.ui.define([
 
         const oNewContext = this.dataV2Model.createEntry("/Products");
         this.oProductCreationV2Dialog.setBindingContext(oNewContext, "DataV2");
+        this.dataV2Model.setProperty(`${oNewContext.getPath()}/isEditable`, false);
         this.setCreationDialogInitialControlsValueState();
         this.oProductCreationV2Dialog.open();
       } catch {
@@ -134,17 +135,7 @@ sap.ui.define([
     },
 
     async onOpenProductEditV2Dialog(oEvent) {
-      const oProductData = oEvent.getSource().getBindingContext("oDataV2").getObject();
-      this.oConfigModel.setProperty("/newProductData", {
-        ...oProductData,
-        isNameValid: true,
-        isDescriptionValid: true,
-        isRatingValid: true,
-        isPriceValid: true,
-        isReleaseDateValid: true,
-        isDiscontinuedDateValid: true,
-        isEditable: true,
-      });
+      const sProductPath = oEvent.getSource().getParent().getBindingContext("DataV2").getPath();
 
       try {
         if (!this.oProductEditDialog) {
@@ -154,10 +145,12 @@ sap.ui.define([
           });
 
           this.oProductEditDialog.bindElement({
-            path: "/newProductData",
-            model: "oConfigModel"
+            path: sProductPath,
+            model: "DataV2"
           });
         }
+
+        this.dataV2Model.setProperty(`${sProductPath}/isEditable`, true);
 
         this.oProductEditDialog.open();
       } catch {
@@ -166,24 +159,26 @@ sap.ui.define([
     },
 
     onCancelV2ProductUpdate() {
+      if (this.dataV2Model.hasPendingChanges()) {
+        this.dataV2Model.resetChanges();
+      }
       this.oProductEditDialog.close();
     },
 
     onSubmitV2ProductUpdate() {
-      const { ID, Name, Description, Rating, Price, ReleaseDate, DiscontinuedDate } = this.oConfigModel.getProperty("/newProductData");
-
-      const oModel = this.getView().getModel("oDataV2");
       const oBundle = this.getView().getModel("i18n").getResourceBundle();
       const sSuccessMsg = oBundle.getText("editSuccessMessage");
       const sErrorMsg = oBundle.getText("editErrorMessage");
 
-      oModel.update(`/Products(${ID})`, { Name, Description, Rating, Price, ReleaseDate, DiscontinuedDate }, {
-        success: () => {
-          MessageToast.show(sSuccessMsg),
-          this.oProductEditDialog.close();
-        },
-        error: () => MessageBox.error(sErrorMsg),
-      });
+      if (this.dataV2Model.hasPendingChanges()) {
+        this.dataV2Model.submitChanges({
+          success: () => {
+            MessageToast.show(sSuccessMsg),
+            this.oProductEditDialog.close();
+          },
+          error: () => MessageBox.error(sErrorMsg),
+        });
+      }
     }
   });
 });

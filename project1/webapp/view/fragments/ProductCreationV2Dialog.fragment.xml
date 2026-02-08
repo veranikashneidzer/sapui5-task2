@@ -84,50 +84,28 @@
                     />
             </FlexBox>
         </content>
-        <!-- <beginButton>
-            <Button
-                text="{= !!${oConfigModel>isEditable} ? ${i18n>dialogSaveButtonText} : ${i18n>dialogAddButtonText}}"
-                press="{= !!${oConfigModel>isEditable} ? ${.onSubmitV2ProductUpdate} : ${.onSubmitV2ProductCreation}}"
-                />
-        </beginButton>
-        <endButton>
-            <Button
-                text="{i18n>dialogCancelButtonText}"
-                press="{= !!${oConfigModel>isEditable} ? ${.onCancelV2ProductUpdate} : ${.onCancelV2ProductCreation}}"/>
-        </endButton> -->
-        <beginButton>
-            <Button
-                text="{i18n>dialogSaveButtonText}"
-                press=".onSubmitV2ProductUpdate"
-                />
-        </beginButton>
-        <endButton>
-            <Button
-                text="{i18n>dialogCancelButtonText}"
-                press=".onCancelV2ProductUpdate"/>
-        </endButton>
         <footer>
 			<Toolbar>
 				<content>
                     <ToolbarSpacer />
                     <Button
                         text="{i18n>dialogAddButtonText}"
-                        visible="{= !${oConfigModel>isEditable}}"
+                        visible="{= !${DataV2>isEditable}}"
                         press=".onSubmitV2ProductCreation"
                         />
                     <Button
                         text="{i18n>dialogCancelButtonText}"
-                        visible="{= !${oConfigModel>isEditable}}"
+                        visible="{= !${DataV2>isEditable}}"
                         press=".onCancelV2ProductCreation"
                         />
                     <Button
                         text="{i18n>dialogSaveButtonText}"
-                        visible="{oConfigModel>isEditable}"
+                        visible="{DataV2>isEditable}"
                         press=".onSubmitV2ProductUpdate"
                         />
                     <Button
                         text="{i18n>dialogCancelButtonText}"
-                        visible="{oConfigModel>isEditable}"
+                        visible="{DataV2>isEditable}"
                         press=".onCancelV2ProductUpdate"
                         />
 				</content>
