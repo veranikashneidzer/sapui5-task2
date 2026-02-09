@@ -1,8 +1,84 @@
 <mvc:View
 	controllerName="project1.controller.Product"
-	xmlns="sap.m"
+	xmlns="sap.uxap"
+	xmlns:m="sap.m"
+	xmlns:f="sap.ui.layout.form"
 	xmlns:mvc="sap.ui.core.mvc">
-	<Page
-		title="Product">
-	</Page>
+	<ObjectPageLayout id="ObjectPageLayout" upperCaseAnchorBar="false">
+		<headerTitle>
+			<ObjectPageHeader objectTitle="{DataV2>Name}">
+			</ObjectPageHeader>
+		</headerTitle>
+
+		<sections>
+			<ObjectPageSection titleUppercase="false" title="{i18n>tabProductDetails}">
+				<subSections>
+					<ObjectPageSubSection titleUppercase="false">
+						<blocks>
+						<f:SimpleForm
+                            id="productForm"
+                            editable="false"
+                            layout="ResponsiveGridLayout"
+                        >
+							<m:Label
+								text="{i18n>columnName}"/>
+							<m:Text
+								text="{DataV2>Name}"/>
+							<m:Label
+								text="{i18n>columnDescription}"/>
+							<m:Text
+								text="{DataV2>Description}"/>
+							<m:Label
+								text="{i18n>columnRating}"/>
+							<m:RatingIndicator
+								value="{DataV2>Rating}"
+								editable="false"
+								enabled="false"
+								iconSize="16px"
+								maxValue="5"/>
+							<m:Label
+								text="{i18n>columnPrice}"/>
+							<m:ObjectNumber
+								number="{
+									path: 'DataV2>Price',
+									type: 'FloatType',
+									formatOptions: { minIntegerDigits: 2 }
+								}"/>
+							<m:Label
+								text="{i18n>columnReleaseDate}"/>
+							<m:Text
+								text="{
+									path: 'DataV2>ReleaseDate',
+									type: 'sap.ui.model.type.Date',
+									formatOptions: {
+										pattern: 'yyyy-MM-dd'
+									}
+								}"/>
+							<m:Label
+								text="{i18n>columnDiscontinuedDate}"/>
+							<m:Text
+								text="{
+									path: 'DataV2>DiscontinuedDate',
+									type: 'sap.ui.model.type.Date',
+									formatOptions: {
+										pattern: 'yyyy-MM-dd'
+									}
+								}"/>
+                        </f:SimpleForm>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+
+			<ObjectPageSection titleUppercase="false" title="{i18n>tabProductSuppliers}">
+				<subSections>
+					<ObjectPageSubSection titleUppercase="false">
+						<m:Text text="{DataV2>Name}"></m:Text>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+
+		</sections>
+
+	</ObjectPageLayout>
 </mvc:View>
