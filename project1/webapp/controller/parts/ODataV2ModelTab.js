@@ -1,8 +1,11 @@
 sap.ui.define([
   "sap/m/MessageToast",
   "sap/m/MessageBox",
-  "sap/base/Log"
-], (MessageToast, MessageBox, Log) => {
+  "sap/base/Log",
+  "sap/ui/model/Filter",
+  "sap/ui/model/FilterOperator",
+  "sap/ui/model/Sorter"
+], (MessageToast, MessageBox, Log, Filter, FilterOperator, Sorter) => {
   "use strict";
 
   return ({
@@ -154,6 +157,26 @@ sap.ui.define([
       oControl.setValueState(isValid ? "None" : "Error");
 
       return isValid;
+    },
+
+    onSearchV2Products(oEvent) {
+      const aFilter = [];
+			const sValue = oEvent.getParameter("value");
+			if (sValue) {
+				aFilter.push(new Filter("Name", FilterOperator.Contains, sValue));
+			}
+
+			const oList = this.byId("productsListV2");
+			const oBinding = oList.getBinding("items");
+			oBinding.filter(aFilter);
+    },
+
+    onSortV2Products(oEvent) {
+        const oList = this.byId("productsListV2");
+			  const oBinding = oList.getBinding("items");
+        const sSelectedKey = oEvent.getSource().getSelectedKey();
+        const oSorter = new Sorter(sSelectedKey, true);
+        oBinding.sort(oSorter);
     }
   });
 });
