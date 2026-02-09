@@ -2,8 +2,7 @@
    xmlns="sap.m"
    xmlns:core="sap.ui.core" >
    <Dialog
-        id="ProductCreationV2Dialog"
-        title ="{i18n>productCreationDialogHeaderText}"
+        title ="{= !!${oConfigModel>isEditable} ? ${i18n>productEditDialogHeaderText} : ${i18n>productCreationDialogHeaderText}}"
         class="sapUiResponsivePadding--content sapUiResponsivePadding--header sapUiResponsivePadding--footer sapUiResponsivePadding--subHeader">
         <content>
             <FlexBox direction="Column">
@@ -85,15 +84,20 @@
                     />
             </FlexBox>
         </content>
-        <beginButton>
-            <Button
-                text="{i18n>dialogAddButtonText}"
-                press=".onSubmitV2ProductCreation"/>
-        </beginButton>
-        <endButton>
-            <Button
-                text="{i18n>dialogCancelButtonText}"
-                press=".onCancelV2ProductCreation"/>
-        </endButton>
+        <footer>
+			<Toolbar>
+				<content>
+                    <ToolbarSpacer />
+                    <Button
+                        text="{configModel>/buttonSubmitText}"
+                        press=".onSubmitV2Product"
+                        />
+                    <Button
+                        text="{i18n>dialogCancelButtonText}"
+                        press=".onCancelProductV2DataChanging"
+                        />
+				</content>
+			</Toolbar>
+		</footer>
    </Dialog>
 </core:FragmentDefinition>

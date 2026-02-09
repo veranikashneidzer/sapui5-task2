@@ -78,14 +78,7 @@ sap.ui.define([
       this.configModel = new JSONModel({
         productsSelectedItems: [],
         isNewProductValid: false,
-        newProductData: {
-          isNameValid: false,
-          isDescriptionValid: false,
-          isRatingValid: false,
-          isPriceValid: false,
-          isReleaseDateValid: false,
-          isDiscontinuedDateValid: false,
-        },
+        buttonSubmitText: '',
       });
 
       this.getView().setModel(this.configModel, "configModel");
