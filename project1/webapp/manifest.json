@@ -112,6 +112,11 @@
           "target": [
             "TargetMain"
           ]
+        },
+        {
+          "name": "Tab",
+          "pattern": "tab/{tabKey}",
+          "target": ["TargetMain"]
         }
       ],
       "targets": {
