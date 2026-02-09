@@ -47,55 +47,77 @@ sap.ui.define([
     },
 
     setCreationDialogInitialControlsValueState() {
-      const aControls = this.oProductCreationV2Dialog.getContent()[0].getItems();
+      const aControls = this.oProductV2DataChangingDialog.getContent()[0].getItems();
 
       aControls.forEach((oControl) => {
         oControl.setValueState("None");
       });
     },
 
-    async onOpenProductCreationV2Dialog() {
-      const oList = this.byId("productsListV2");
-      oList.removeSelections();
+    async _onOpenProductV2DataChangingDialog(oSource = {}, bIsCreate = true) {
+      let oContext = {};
 
       try {
         if (!this.oProductCreationDialog) {
-          this.oProductCreationV2Dialog ??= await this.loadFragment({
-            name: "project1.view.fragments.ProductCreationV2Dialog",
+          this.oProductV2DataChangingDialog ??= await this.loadFragment({
+            name: "project1.view.fragments.ProductV2DataChangingDialog",
             id: 'productCreationV2Dialog',
           });
         }
 
-        const oNewContext = this.dataV2Model.createEntry("/Products");
-        this.oProductCreationV2Dialog.setBindingContext(oNewContext, "DataV2");
-        this.dataV2Model.setProperty(`${oNewContext.getPath()}/isEditable`, false);
+        if (bIsCreate) {
+          const oList = this.byId("productsListV2");
+          oList.removeSelections();
+
+           oContext = this.dataV2Model.createEntry("/Products");
+        } else {
+          oContext = oSource.getParent().getBindingContext("DataV2");
+        }
+
+        this.oProductV2DataChangingDialog.setBindingContext(oContext, "DataV2");
+
+        this.configModel.setProperty('/buttonSubmitText', this.oBundle.getText(bIsCreate ? "dialogAddButtonText" : "dialogSaveButtonText"));
+        
         this.setCreationDialogInitialControlsValueState();
-        this.oProductCreationV2Dialog.open();
+        this.oProductV2DataChangingDialog.open();
       } catch {
-        Log.error("Cannot load product creation dialog");
+        Log.error("Cannot load product create dialog");
       }
     },
 
-    onSubmitV2ProductCreation() {
+    onOpenProductV2DataCreateDialog() {
+      this._onOpenProductV2DataChangingDialog();
+    },
+
+    onSubmitV2Product(oEvent) {
+      const sText = oEvent.getSource().getText();
+      const bIsCreate = sText === this.oBundle.getText("dialogAddButtonText");
+
       if (!this.validateForm()) {
         return;
       }
 
-      const sSuccessMsg = this.oBundle.getText("creationSuccessMessage");
-      const sErrorMsg = this.oBundle.getText("creationErrorMessage");
+      const sSuccessMsg = this.oBundle.getText(bIsCreate ? "createSuccessMessage" : "editSuccessMessage");
+      const sErrorMsg = this.oBundle.getText(bIsCreate ? "createErrorMessage" : "editErrorMessage");
 
-      this.dataV2Model.submitChanges({
-        success: () => {
-          MessageToast.show(sSuccessMsg),
-          this.oProductCreationV2Dialog.close();
-        },
-        error: () => MessageBox.error(sErrorMsg),
-      });
+      if (this.dataV2Model.hasPendingChanges()) {
+        this.dataV2Model.submitChanges({
+          success: () => {
+            MessageToast.show(sSuccessMsg),
+            this.oProductV2DataChangingDialog.close();
+          },
+          error: () => MessageBox.error(sErrorMsg),
+        });
+      }
     },
 
-    onCancelV2ProductCreation() {
+    async onOpenProductV2DataEditDialog(oEvent) {
+      this._onOpenProductV2DataChangingDialog(oEvent.getSource(), false);
+    },
+
+    onCancelProductV2DataChanging() {
       this.dataV2Model.resetChanges();
-      this.oProductCreationV2Dialog.close();
+      this.oProductV2DataChangingDialog.close();
     },
 
     onCreationDialogControlChange(oEvent) {
@@ -105,7 +127,7 @@ sap.ui.define([
     },
 
     validateForm() {
-      const aControls = this.oProductCreationV2Dialog.getContent()[0].getItems();
+      const aControls = this.oProductV2DataChangingDialog.getContent()[0].getItems();
       let isAllControlsValid = true;
 
       aControls.forEach((oControl) => {
@@ -132,53 +154,6 @@ sap.ui.define([
       oControl.setValueState(isValid ? "None" : "Error");
 
       return isValid;
-    },
-
-    async onOpenProductEditV2Dialog(oEvent) {
-      const sProductPath = oEvent.getSource().getParent().getBindingContext("DataV2").getPath();
-
-      try {
-        if (!this.oProductEditDialog) {
-          this.oProductEditDialog ??= await this.loadFragment({
-            name: "project1.view.fragments.ProductCreationV2Dialog",
-            id: 'productUpdateV2Dialog',
-          });
-
-          this.oProductEditDialog.bindElement({
-            path: sProductPath,
-            model: "DataV2"
-          });
-        }
-
-        this.dataV2Model.setProperty(`${sProductPath}/isEditable`, true);
-
-        this.oProductEditDialog.open();
-      } catch {
-        Log.error("Cannot load product creation dialog");
-      }
-    },
-
-    onCancelV2ProductUpdate() {
-      if (this.dataV2Model.hasPendingChanges()) {
-        this.dataV2Model.resetChanges();
-      }
-      this.oProductEditDialog.close();
-    },
-
-    onSubmitV2ProductUpdate() {
-      const oBundle = this.getView().getModel("i18n").getResourceBundle();
-      const sSuccessMsg = oBundle.getText("editSuccessMessage");
-      const sErrorMsg = oBundle.getText("editErrorMessage");
-
-      if (this.dataV2Model.hasPendingChanges()) {
-        this.dataV2Model.submitChanges({
-          success: () => {
-            MessageToast.show(sSuccessMsg),
-            this.oProductEditDialog.close();
-          },
-          error: () => MessageBox.error(sErrorMsg),
-        });
-      }
     }
   });
 });

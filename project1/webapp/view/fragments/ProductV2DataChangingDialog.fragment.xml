@@ -89,24 +89,12 @@
 				<content>
                     <ToolbarSpacer />
                     <Button
-                        text="{i18n>dialogAddButtonText}"
-                        visible="{= !${DataV2>isEditable}}"
-                        press=".onSubmitV2ProductCreation"
+                        text="{configModel>/buttonSubmitText}"
+                        press=".onSubmitV2Product"
                         />
                     <Button
                         text="{i18n>dialogCancelButtonText}"
-                        visible="{= !${DataV2>isEditable}}"
-                        press=".onCancelV2ProductCreation"
-                        />
-                    <Button
-                        text="{i18n>dialogSaveButtonText}"
-                        visible="{DataV2>isEditable}"
-                        press=".onSubmitV2ProductUpdate"
-                        />
-                    <Button
-                        text="{i18n>dialogCancelButtonText}"
-                        visible="{DataV2>isEditable}"
-                        press=".onCancelV2ProductUpdate"
+                        press=".onCancelProductV2DataChanging"
                         />
 				</content>
 			</Toolbar>

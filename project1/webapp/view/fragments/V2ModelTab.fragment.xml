@@ -21,7 +21,7 @@
                 </Button>
                 <Button
                     text="{i18n>buttonAdd}"
-                    press=".onOpenProductCreationV2Dialog">
+                    press=".onOpenProductV2DataCreateDialog">
                 </Button>
             </OverflowToolbar>
         </headerToolbar>
@@ -86,7 +86,7 @@
                     <FlexBox justifyContent="End">
                         <Button 
                             text="{i18n>buttonEdit}"
-                            press=".onOpenProductEditV2Dialog"/>
+                            press=".onOpenProductV2DataEditDialog"/>
                     </FlexBox>
                 </cells>
             </ColumnListItem>
