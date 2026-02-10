@@ -3,6 +3,7 @@
 	xmlns="sap.uxap"
 	xmlns:m="sap.m"
 	xmlns:f="sap.ui.layout.form"
+	xmlns:core="sap.ui.core"
 	xmlns:mvc="sap.ui.core.mvc">
 	<ObjectPageLayout id="ObjectPageLayout" upperCaseAnchorBar="false">
 		<headerTitle>
@@ -70,10 +71,55 @@
 				</subSections>
 			</ObjectPageSection>
 
-			<ObjectPageSection titleUppercase="false" title="{i18n>tabProductSuppliers}">
+			<ObjectPageSection titleUppercase="false" title="{i18n>tabProductSupplier}">
 				<subSections>
 					<ObjectPageSubSection titleUppercase="false">
-						<m:Text text="{DataV2>Name}"></m:Text>
+												<blocks>
+						<f:SimpleForm
+                            id="supplierForm"
+                            editable="false"
+                            layout="ResponsiveGridLayout"
+							labelSpanXL="4"
+							labelSpanL="3"
+							labelSpanM="4"
+							labelSpanS="12"
+							adjustLabelSpan="false"
+							emptySpanXL="0"
+							emptySpanL="4"
+							emptySpanM="0"
+							emptySpanS="0"
+							columnsXL="2"
+							columnsL="1"
+							columnsM="1"
+							singleContainerFullSize="false"
+                        >
+							<m:Label
+								text="{i18n>columnName}"/>
+							<m:Text
+								text="{DataV2>Supplier/Name}"/>
+							<core:Title text="Address" />
+							<m:Label
+								text="{i18n>columnStreet}"/>
+							<m:Text
+								text="{DataV2>Supplier/Address/Street}"/>
+							<m:Label
+								text="{i18n>columnCity}"/>
+							<m:Text
+								text="{DataV2>Supplier/Address/City}"/>
+							<m:Label
+								text="{i18n>columnState}"/>
+							<m:Text
+								text="{DataV2>Supplier/Address/State}"/>
+							<m:Label
+								text="{i18n>columnZipCode}"/>
+							<m:Text
+								text="{DataV2>Supplier/Address/ZipCode}"/>
+							<m:Label
+								text="{i18n>columnCountry}"/>
+							<m:Text
+								text="{DataV2>Supplier/Address/Country}"/>
+                        </f:SimpleForm>
+						</blocks>
 					</ObjectPageSubSection>
 				</subSections>
 			</ObjectPageSection>

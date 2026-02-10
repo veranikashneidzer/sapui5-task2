@@ -15,9 +15,9 @@ sap.ui.define([
       this.getView().bindElement({
         path: `/Products(${sProductId})`,
         model: "DataV2",
-        // parameters: {
-        //   expand: "Supplier"
-        // }
+        parameters: {
+          expand: "Supplier"
+        }
       });
     },
   })
