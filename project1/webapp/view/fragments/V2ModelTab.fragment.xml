@@ -11,7 +11,7 @@
         }">
         <headerToolbar>
             <OverflowToolbar id="otbSubheader">
-                <Title text="Products" level="H2" />
+                <Title text="{i18n>productsTableHeader}" level="H2" />
                 <ToolbarSpacer />
                 <Button
                     text="{i18n>buttonDelete}"

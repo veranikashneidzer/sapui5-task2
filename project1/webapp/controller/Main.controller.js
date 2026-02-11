@@ -10,9 +10,6 @@ sap.ui.define([
   return BaseController.extend("project1.controller.Main", Object.assign({}, JSONModelTab, ODataV2ModelTab, ODataV4ModelTab, {
     onInit() {
       this.oRouter = this.getOwnerComponent().getRouter();
-      this.oRouter.getRoute("RouteMain").attachPatternMatched(() => {
-        this.oRouter.navTo("Tab", { tabKey: "jsonTab" }, true);
-      });
       this.oRouter.getRoute("Tab").attachPatternMatched(this.onSetMatchedTab, this);
 
       const aBooks = [
@@ -88,11 +85,9 @@ sap.ui.define([
       });
 
       this.getView().setModel(this.configModel, "configModel");
-
       this.configModel = this.getConfigModel();
-
       this.dataV2Model = this.getOwnerComponent().getModel("DataV2");
-
+      this.dataV4Model = this.getOwnerComponent().getModel("DataV4");
       this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
     },
 
