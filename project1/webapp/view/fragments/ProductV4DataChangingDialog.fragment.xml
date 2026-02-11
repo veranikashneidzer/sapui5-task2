@@ -13,11 +13,11 @@
                     <ToolbarSpacer />
                     <Button
                         text="{configModel>/buttonSubmitText}"
-                        press=".onSubmitV2Product"
+                        press=".onSubmitV4Product"
                         />
                     <Button
                         text="{i18n>dialogCancelButtonText}"
-                        press=".onCancelProductV2DataChanging"
+                        press=".onCancelProductV4DataChanging"
                         />
 				</content>
 			</Toolbar>

@@ -1,0 +1,81 @@
+<core:FragmentDefinition
+   xmlns="sap.m"
+   xmlns:core="sap.ui.core" >
+    <FlexBox direction="Column">
+        <Input
+            id="productCreationDialogNameInput"
+            value="{
+                path: 'DataModel>Name',
+                type: 'sap.ui.model.type.String',
+                constraints: { minLength: 1 }
+            }"
+            required="true" 
+            placeholder="{i18n>productCreationDialogNamePlaceholder}"
+            valueStateText="{i18n>productCreationDialogValidationError}"
+            liveChange=".onCreationDialogControlChange"
+            />
+        <Input
+            id="productCreationDialogDescriptionInput"
+            value="{
+                path: 'DataModel>Description',
+                type: 'sap.ui.model.type.String',
+                constraints: { minLength: 1 }
+            }"
+            required="true" 
+            placeholder="{i18n>productCreationDialogDescriptionPlaceholder}"
+            valueStateText="{i18n>productCreationDialogValidationError}"
+            liveChange=".onCreationDialogControlChange"
+            />
+        <Input
+            id="productCreationDialogRatingInput"
+            type="Number"
+            value="{
+                path: 'DataModel>Rating',
+                type: 'sap.ui.model.type.Integer'
+            }"
+            required="true" 
+            placeholder="{i18n>productCreationDialogRatingPlaceholder}"
+            valueStateText="{i18n>productCreationDialogValidationError}"
+            liveChange=".onCreationDialogControlChange"
+            />
+        <Input
+            id="productCreationDialogPriceInput"
+            type="Number"
+            value="{
+                path: 'DataModel>Price',
+                type: 'sap.ui.model.type.Integer',
+                constraints: { minimum: 0.1 }
+            }"
+            required="true" 
+            placeholder="{i18n>productCreationDialogPricePlaceholder}"
+            valueStateText="{i18n>productCreationDialogValidationError}"
+            liveChange=".onCreationDialogControlChange"
+            />
+        <DatePicker
+            id="productCreationDialogReleaseDateInput"
+            placeholder="{i18n>productCreationDialogReleaseDatePlaceholder}" 
+            displayFormat="dd-MM-yyyy"
+            valueFormat="yyyy-MM-dd" 
+            value="{
+                path: 'DataModel>ReleaseDate',
+                type: 'sap.ui.model.type.Date'
+            }"
+            required="true" 
+            valueStateText="{i18n>productCreationDialogValidationError}"
+            change=".onCreationDialogControlChange"
+            />
+        <DatePicker
+            id="productCreationDialogDiscontinuedDateInput"
+            placeholder="{i18n>productCreationDialogDiscontinuedDatePlaceholder}" 
+            displayFormat="dd-MM-yyyy" 
+            valueFormat="yyyy-MM-dd" 
+            value="{
+                path: 'DataModel>DiscontinuedDate',
+                type: 'sap.ui.model.type.Date'
+            }"
+            required="true" 
+            valueStateText="{i18n>productCreationDialogValidationError}"
+            change=".onCreationDialogControlChange"
+            />
+    </FlexBox>
+</core:FragmentDefinition>

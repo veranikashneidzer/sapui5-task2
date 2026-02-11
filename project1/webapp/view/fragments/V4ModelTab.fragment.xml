@@ -19,6 +19,10 @@
                     enabled="{= !!${configModel>/isDeleteButtonEnabled}}"
                     press=".onOpenProductsV4DeleteConfirmationDialog">
                 </Button>
+                <Button
+                    text="{i18n>buttonAdd}"
+                    press=".onOpenProductV4DataCreateDialog">
+                </Button>
             </OverflowToolbar>
         </headerToolbar>
         <columns>

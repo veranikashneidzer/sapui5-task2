@@ -74,9 +74,10 @@ sap.ui.define([
           oContext = oSource.getParent().getBindingContext("DataV2");
         }
 
-        this.oProductV2DataChangingDialog.setBindingContext(oContext, "DataV2");
+        this.oProductV2DataChangingDialog.setBindingContext(oContext, "DataModel");
 
         this.configModel.setProperty('/buttonSubmitText', this.oBundle.getText(bIsCreate ? "dialogAddButtonText" : "dialogSaveButtonText"));
+        this.configModel.setProperty('/headerText', this.oBundle.getText(bIsCreate ? "productCreationDialogHeaderText" : "productEditDialogHeaderText"));
         
         this.setCreationDialogInitialControlsValueState();
         this.oProductV2DataChangingDialog.open();
@@ -120,12 +121,6 @@ sap.ui.define([
       this.oProductV2DataChangingDialog.close();
     },
 
-    onCreationDialogControlChange(oEvent) {
-      const oControl = oEvent.getSource();
-
-      this._validateControl(oControl);
-    },
-
     validateForm() {
       const aControls = this.oProductV2DataChangingDialog.getContent()[0].getItems();
       let isAllControlsValid = true;
@@ -139,21 +134,6 @@ sap.ui.define([
       });
 
       return isAllControlsValid;
-    },
-
-    _validateControl(oControl) {
-      let isValid = false;
-
-      if (oControl.isA("sap.m.Input")) {
-        const inputValue = oControl.getValue();
-        isValid = oControl.getType() === "Number" ? Number(inputValue) && inputValue > 0 : !!(`${inputValue}`.length);
-      } else if (oControl.isA("sap.m.DatePicker")) {
-        isValid = oControl.isValidValue() && !!oControl.getValue().length;
-      }
-
-      oControl.setValueState(isValid ? "None" : "Error");
-
-      return isValid;
     },
 
     onProductPress(oEvent) {
