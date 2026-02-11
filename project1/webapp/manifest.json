@@ -83,9 +83,12 @@
           "defaultBindingMode": "TwoWay"
         }
       },
-      "oDataV4": {
+      "DataV4": {
         "type": "sap.ui.model.odata.v4.ODataModel",
-        "dataSource": "ODataV4"
+        "dataSource": "ODataV4",
+        "settings": {
+          "updateGroupId": "defferedGroup"
+        }
       }
     },
     "resources": {
@@ -110,7 +113,7 @@
       "routes": [
         {
           "name": "RouteMain",
-          "pattern": ":?query:",
+          "pattern": "",
           "target": [
             "TargetMain"
           ]

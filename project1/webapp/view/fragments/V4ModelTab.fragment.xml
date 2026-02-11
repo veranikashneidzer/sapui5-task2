@@ -2,13 +2,25 @@
     xmlns="sap.m"
     xmlns:core="sap.ui.core">
     <Table
-        id="booksListV4"
+        id="productsListV4"
         width="auto"
         mode="MultiSelect"
-        selectionChange=".onBooksTableSelectedItemsChanged"
+        selectionChange=".onProductsTableV4SelectedItemsChanged"
         items="{
-            path: 'oDataV4>/Products'
+            path: 'DataV4>/Products'
         }">
+       <headerToolbar>
+            <OverflowToolbar id="otbSubheadeV4">
+                <Title text="{i18n>productsTableHeader}" level="H2" />
+                <ToolbarSpacer/>
+                <Button
+                    text="{i18n>buttonDelete}"
+                    class="sapUiTinyMarginEnd"
+                    enabled="{= !!${configModel>/isDeleteButtonEnabled}}"
+                    press=".onOpenProductsV4DeleteConfirmationDialog">
+                </Button>
+            </OverflowToolbar>
+        </headerToolbar>
         <columns>
             <Column>
                 <Text text="{i18n>columnName}" />
@@ -45,17 +57,17 @@
             <ColumnListItem>
                 <cells>
                     <ObjectIdentifier 
-                        title="{oDataV4>Name}" />
+                        title="{DataV4>Name}" />
                     <Text
-                        text="{oDataV4>Description}" />
+                        text="{DataV4>Description}" />
                     <Text
-                        text="{oDataV4>ReleaseDate}" />
+                        text="{DataV4>ReleaseDate}" />
                     <Text
-                        text="{oDataV4>DiscontinuedDate}"/>
+                        text="{DataV4>DiscontinuedDate}"/>
                     <Text
-                        text="{oDataV4>Rating}"/>
+                        text="{DataV4>Rating}"/>
                     <Text
-                        text="{oDataV4>Price}"/>
+                        text="{DataV4>Price}"/>
                 </cells>
             </ColumnListItem>
         </items>
