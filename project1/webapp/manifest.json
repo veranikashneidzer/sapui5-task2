@@ -85,7 +85,10 @@
       },
       "DataV4": {
         "type": "sap.ui.model.odata.v4.ODataModel",
-        "dataSource": "ODataV4"
+        "dataSource": "ODataV4",
+        "settings": {
+          "updateGroupId": "defferedGroup"
+        }
       }
     },
     "resources": {

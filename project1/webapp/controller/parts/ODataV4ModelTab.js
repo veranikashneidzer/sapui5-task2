@@ -7,7 +7,7 @@ sap.ui.define([
 
   return ({
     onProductsTableV4SelectedItemsChanged(oEvent) {
-      this.configModel.setProperty("/productsSelectedItems", oEvent.getSource().getSelectedItems());
+      this.configModel.setProperty("/isDeleteButtonEnabled", !!oEvent.getSource().getSelectedItems().length);
     },
 
     onOpenProductsV4DeleteConfirmationDialog() {
@@ -28,7 +28,9 @@ sap.ui.define([
       const aProductContexts = oList.getSelectedItems().map((item) => item.getBindingContext("DataV4"));
 
       try {
-        aProductContexts.forEach(async (product) => await product.delete());
+        aProductContexts.forEach((product) => product.delete("defferedGroup"));
+
+        await this.dataV4Model.submitBatch("defferedGroup");
 
         const sSuccessMsg = this.oBundle.getText(oList.getSelectedItems().length > 1 ? "deletionSuccessMessagePlural" : "deletionSuccessMessage");
         MessageToast.show(sSuccessMsg);
