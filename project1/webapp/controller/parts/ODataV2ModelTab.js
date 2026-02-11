@@ -154,6 +154,11 @@ sap.ui.define([
       oControl.setValueState(isValid ? "None" : "Error");
 
       return isValid;
+    },
+
+    onProductPress(oEvent) {
+      const sProductId = oEvent.getSource().getBindingContext("DataV2").getObject()?.["ID"];
+      this.oRouter.navTo("ProductDetailPage", { ProductID: sProductId });
     }
   });
 });

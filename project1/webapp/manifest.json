@@ -56,7 +56,9 @@
       "minUI5Version": "1.144.0",
       "libs": {
         "sap.m": {},
-        "sap.ui.core": {}
+        "sap.ui.core": {},
+        "sap.uxap": {},
+        "sap.ui.layout": {}
       }
     },
     "contentDensities": {
@@ -117,12 +119,21 @@
           "name": "Tab",
           "pattern": "tab/{tabKey}",
           "target": ["TargetMain"]
+        },
+        {
+          "name": "ProductDetailPage",
+          "pattern": "Product/{ProductID}",
+          "target": ["ProductDetailPage"]
         }
       ],
       "targets": {
         "TargetMain": {
           "id": "Main",
           "name": "Main"
+        },
+        "ProductDetailPage": {
+          "id": "Product",
+          "name": "Product"
         }
       }
     },

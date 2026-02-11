@@ -63,7 +63,9 @@
             </Column>
         </columns>
         <items>
-            <ColumnListItem>
+            <ColumnListItem
+                press=".onProductPress"
+                type="Navigation">
                 <cells>
                     <ObjectIdentifier 
                         title="{DataV2>Name}" />
