@@ -69,7 +69,7 @@ sap.ui.define([
           const oList = this.byId("productsListV2");
           oList.removeSelections();
 
-           oContext = this.oDataV2Model.createEntry("/Products");
+          oContext = this.oDataV2Model.createEntry("/Products");
         } else {
           oContext = oSource.getParent().getBindingContext("DataV2");
         }

@@ -56,6 +56,13 @@
                 demandPopin="true">
                 <Text text="{i18n>columnPrice}" />
             </Column>
+            <Column
+                hAlign="End"
+                width="10em"
+                minScreenWidth="Small"
+                demandPopin="true">
+                <Text text="{i18n>columnActions}" />
+            </Column>
         </columns>
         <items>
             <ColumnListItem>
@@ -65,13 +72,26 @@
                     <Text
                         text="{DataV4>Description}" />
                     <Text
-                        text="{DataV4>ReleaseDate}" />
+                        text="{
+                            path: 'DataV4>ReleaseDate',
+                            type: 'sap.ui.model.odata.type.DateTimeOffset'
+                        }"
+                    />
                     <Text
-                        text="{DataV4>DiscontinuedDate}"/>
+                        text="{
+                            path: 'DataV4>DiscontinuedDate',
+                            type: 'sap.ui.model.odata.type.DateTimeOffset'
+                        }"
+                    />
                     <Text
                         text="{DataV4>Rating}"/>
                     <Text
                         text="{DataV4>Price}"/>
+                    <FlexBox justifyContent="End">
+                        <Button 
+                            text="{i18n>buttonEdit}"
+                            press=".onOpenProductV4DataEditDialog"/>
+                    </FlexBox>
                 </cells>
             </ColumnListItem>
         </items>

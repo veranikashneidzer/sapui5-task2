@@ -71,6 +71,8 @@ sap.ui.define([
               Log.error(oError.message);
             }
           });
+        } else {
+          oContext = oSource.getParent().getBindingContext("DataV4");
         }
 
         this.oProductV4DataCreateEditDialog.setBindingContext(oContext, "DataV4");
