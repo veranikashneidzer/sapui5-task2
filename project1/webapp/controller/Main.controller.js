@@ -86,8 +86,8 @@ sap.ui.define([
 
       this.getView().setModel(this.configModel, "configModel");
       this.configModel = this.getConfigModel();
-      this.dataV2Model = this.getOwnerComponent().getModel("DataV2");
-      this.dataV4Model = this.getOwnerComponent().getModel("DataV4");
+      this.oDataV2Model = this.getOwnerComponent().getModel("DataV2");
+      this.oDataV4Model = this.getOwnerComponent().getModel("DataV4");
       this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
     },
 

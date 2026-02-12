@@ -26,10 +26,10 @@ sap.ui.define([
     onDeleteV2Products() {
       const oList = this.byId("productsListV2");
       const selectedIDs = oList?.getSelectedContexts().map(record => record.getObject()?.["ID"]);
-      this.dataV2Model.setDeferredGroups(["deleteGroup"]);
+      this.oDataV2Model.setDeferredGroups(["deleteGroup"]);
 
       oList?.getSelectedContexts()?.forEach((oContext, index) => {
-        this.dataV2Model.remove(oContext.getPath(), {
+        this.oDataV2Model.remove(oContext.getPath(), {
           groupId: "deleteGroup"
         });
       });
@@ -37,7 +37,7 @@ sap.ui.define([
       const sSuccessMsg = this.oBundle.getText(selectedIDs.length > 1 ? "deletionSuccessMessagePlural" : "deletionSuccessMessage");
       const sErrorMsg = this.oBundle.getText("deletionErrorMessage");
 
-      this.dataV2Model.submitChanges({
+      this.oDataV2Model.submitChanges({
         groupId: "deleteGroup",
         success: () => MessageToast.show(sSuccessMsg),
         error: () => MessageBox.error(sErrorMsg),
@@ -47,20 +47,20 @@ sap.ui.define([
     },
 
     setCreationDialogInitialControlsValueState() {
-      const aControls = this.oProductV2DataChangingDialog.getContent()[0].getItems();
+      const aControls = this.oProductV2DataCreateEditDialog.getContent()[0].getItems();
 
       aControls.forEach((oControl) => {
         oControl.setValueState("None");
       });
     },
 
-    async _onOpenProductV2DataChangingDialog(oSource = {}, bIsCreate = true) {
+    async _onOpenProductV2DataCreateEditDialog(oSource = {}, bIsCreate = true) {
       let oContext = {};
 
       try {
         if (!this.oProductCreationDialog) {
-          this.oProductV2DataChangingDialog ??= await this.loadFragment({
-            name: "project1.view.fragments.ProductV2DataChangingDialog",
+          this.oProductV2DataCreateEditDialog ??= await this.loadFragment({
+            name: "project1.view.fragments.ProductV2DataCreateEditDialog",
             id: 'productCreationV2Dialog',
           });
         }
@@ -69,25 +69,25 @@ sap.ui.define([
           const oList = this.byId("productsListV2");
           oList.removeSelections();
 
-           oContext = this.dataV2Model.createEntry("/Products");
+           oContext = this.oDataV2Model.createEntry("/Products");
         } else {
           oContext = oSource.getParent().getBindingContext("DataV2");
         }
 
-        this.oProductV2DataChangingDialog.setBindingContext(oContext, "DataModel");
+        this.oProductV2DataCreateEditDialog.setBindingContext(oContext, "DataV2");
 
         this.configModel.setProperty('/buttonSubmitText', this.oBundle.getText(bIsCreate ? "dialogAddButtonText" : "dialogSaveButtonText"));
         this.configModel.setProperty('/headerText', this.oBundle.getText(bIsCreate ? "productCreationDialogHeaderText" : "productEditDialogHeaderText"));
         
         this.setCreationDialogInitialControlsValueState();
-        this.oProductV2DataChangingDialog.open();
+        this.oProductV2DataCreateEditDialog.open();
       } catch {
         Log.error("Cannot load product create dialog");
       }
     },
 
     onOpenProductV2DataCreateDialog() {
-      this._onOpenProductV2DataChangingDialog();
+      this._onOpenProductV2DataCreateEditDialog();
     },
 
     onSubmitV2Product(oEvent) {
@@ -101,11 +101,11 @@ sap.ui.define([
       const sSuccessMsg = this.oBundle.getText(bIsCreate ? "createSuccessMessage" : "editSuccessMessage");
       const sErrorMsg = this.oBundle.getText(bIsCreate ? "createErrorMessage" : "editErrorMessage");
 
-      if (this.dataV2Model.hasPendingChanges()) {
-        this.dataV2Model.submitChanges({
+      if (this.oDataV2Model.hasPendingChanges()) {
+        this.oDataV2Model.submitChanges({
           success: () => {
             MessageToast.show(sSuccessMsg),
-            this.oProductV2DataChangingDialog.close();
+            this.oProductV2DataCreateEditDialog.close();
           },
           error: () => MessageBox.error(sErrorMsg),
         });
@@ -113,16 +113,16 @@ sap.ui.define([
     },
 
     async onOpenProductV2DataEditDialog(oEvent) {
-      this._onOpenProductV2DataChangingDialog(oEvent.getSource(), false);
+      this._onOpenProductV2DataCreateEditDialog(oEvent.getSource(), false);
     },
 
     onCancelProductV2DataChanging() {
-      this.dataV2Model.resetChanges();
-      this.oProductV2DataChangingDialog.close();
+      this.oDataV2Model.resetChanges();
+      this.oProductV2DataCreateEditDialog.close();
     },
 
     validateForm() {
-      const aControls = this.oProductV2DataChangingDialog.getContent()[0].getItems();
+      const aControls = this.oProductV2DataCreateEditDialog.getContent()[0].getItems();
       let isAllControlsValid = true;
 
       aControls.forEach((oControl) => {

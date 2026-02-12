@@ -30,7 +30,7 @@ sap.ui.define([
       try {
         aProductContexts.forEach((product) => product.delete("defferedGroup"));
 
-        await this.dataV4Model.submitBatch("defferedGroup");
+        await this.oDataV4Model.submitBatch("defferedGroup");
 
         const sSuccessMsg = this.oBundle.getText(oList.getSelectedItems().length > 1 ? "deletionSuccessMessagePlural" : "deletionSuccessMessage");
         MessageToast.show(sSuccessMsg);
@@ -43,20 +43,20 @@ sap.ui.define([
     },
 
     setCreationDialogV4InitialControlsValueState() {
-      const aControls = this.oProductV4DataChangingDialog.getContent()[0].getItems();
+      const aControls = this.oProductV4DataCreateEditDialog.getContent()[0].getItems();
 
       aControls.forEach((oControl) => {
         oControl.setValueState("None");
       });
     },
 
-    async _onOpenProductV4DataChangingDialog(oSource = {}, bIsCreate = true) {
+    async _onOpenProductV4DataCreateEditDialog(oSource = {}, bIsCreate = true) {
       let oContext = {};
 
       try {
         if (!this.oProductCreationDialog) {
-          this.oProductV4DataChangingDialog ??= await this.loadFragment({
-            name: "project1.view.fragments.ProductV4DataChangingDialog",
+          this.oProductV4DataCreateEditDialog ??= await this.loadFragment({
+            name: "project1.view.fragments.ProductV4DataCreateEditDialog",
             id: 'productCreationV4Dialog',
           });
         }
@@ -64,22 +64,29 @@ sap.ui.define([
         if (bIsCreate) {
           const oList = this.byId("productsListV4");
           oList.removeSelections();
+
+          oContext = this.oDataV4Model.bindList("/Products").create(null, true);
+          oContext.oCreatedPromise.catch((oError) => {
+            if (!oError.canceled) {
+              Log.error(oError.message);
+            }
+          });
         }
 
-        this.oProductV4DataChangingDialog.setBindingContext({}, "DataModel");
+        this.oProductV4DataCreateEditDialog.setBindingContext(oContext, "DataV4");
 
         this.configModel.setProperty('/buttonSubmitText', this.oBundle.getText(bIsCreate ? "dialogAddButtonText" : "dialogSaveButtonText"));
         this.configModel.setProperty('/headerText', this.oBundle.getText(bIsCreate ? "productCreationDialogHeaderText" : "productEditDialogHeaderText"));
         
         this.setCreationDialogV4InitialControlsValueState();
-        this.oProductV4DataChangingDialog.open();
+        this.oProductV4DataCreateEditDialog.open();
       } catch {
         Log.error("Cannot load product create dialog");
       }
     },
 
     onOpenProductV4DataCreateDialog() {
-      this._onOpenProductV4DataChangingDialog();
+      this._onOpenProductV4DataCreateEditDialog();
     },
 
     async onSubmitV4Product(oEvent) {
@@ -92,22 +99,12 @@ sap.ui.define([
 
       const sSuccessMsg = this.oBundle.getText(bIsCreate ? "createSuccessMessage" : "editSuccessMessage");
       const sErrorMsg = this.oBundle.getText(bIsCreate ? "createErrorMessage" : "editErrorMessage");
-      const aControls = this.oProductV4DataChangingDialog.getContent()[0].getItems();
 
       try {
-        this.dataV4Model.bindList("/Products").create({
-          Name: aControls[0].getValue(),
-          Description: aControls[1].getValue(),
-          Rating: aControls[2].getValue(),
-          Price: aControls[3].getValue(),
-          ReleaseDate: aControls[4].getValue(),
-          DiscontinuedDate: aControls[5].getValue(),
-        });
-
-        await this.dataV4Model.submitBatch("defferedGroup");
+        await this.oDataV4Model.submitBatch("defferedGroup");
         MessageToast.show(sSuccessMsg);
-        this.oProductV4DataChangingDialog.close();
-        this._resetDialogControlsValues();
+        this.oProductV4DataCreateEditDialog.close();
+
         this.byId("productsListV4").getBinding("items").refresh();
       } catch {
         MessageBox.error(sErrorMsg);
@@ -115,21 +112,16 @@ sap.ui.define([
     },
 
     async onOpenProductV4DataEditDialog(oEvent) {
-      this._onOpenProductV4DataChangingDialog(oEvent.getSource(), false);
+      this._onOpenProductV4DataCreateEditDialog(oEvent.getSource(), false);
     },
 
     onCancelProductV4DataChanging() {
-      this.oProductV4DataChangingDialog.close();
-      this._resetDialogControlsValues();
-    },
-
-    _resetDialogControlsValues() {
-      const aControls = this.oProductV4DataChangingDialog.getContent()[0].getItems();
-      aControls.forEach((oControl) => oControl.setValue(""));
+      this.oProductV4DataCreateEditDialog.close();
+      this.oDataV4Model.resetChanges("defferedGroup");
     },
 
     validateDataV4Form() {
-      const aControls = this.oProductV4DataChangingDialog.getContent()[0].getItems();
+      const aControls = this.oProductV4DataCreateEditDialog.getContent()[0].getItems();
       let isAllControlsValid = true;
 
       aControls.forEach((oControl) => {
